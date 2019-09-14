@@ -1,0 +1,47 @@
+syntax = "proto3";
+package account;
+option go_package = "github.com/nirajgeorgian/account/src/api;api";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+option (gogoproto.goproto_registration) = true;
+
+import "model.proto";
+
+// create an account
+message CreateAccountReq {
+  Account account = 1;
+}
+message CreateAccountRes {
+  Account account = 1;
+}
+
+// read an account
+message ReadAccountReq {
+  string account_id = 1;
+}
+message ReadAccountRes {
+  Account account = 1;
+}
+
+// update an account
+message UpdateAccountReq {
+  Account account = 1;
+}
+message UpdateAccountRes {
+  bool success = 1;
+}
+
+// delete an account
+message DeleteAccountReq {
+  string account_id = 1;
+}
+message DeleteAccountRes {
+  bool success = 1;
+}
+
+service AccountService {
+  rpc CreateAccount (CreateAccountReq) returns (CreateAccountRes) {};
+  // rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
+  // rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
+  // rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRes) {};
+}
