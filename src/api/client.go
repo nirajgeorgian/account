@@ -7,11 +7,6 @@ import (
 	"github.com/nirajgeorgian/account/src/model"
 )
 
-type Client struct {
-	conn    *grpc.ClientConn
-	service AccountServiceClient
-}
-
 func NewClient(url string) (*Client, error) {
 	conn, err := grpc.Dial(url, grpc.WithInsecure())
 	if err != nil {

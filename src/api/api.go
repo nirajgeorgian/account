@@ -17,6 +17,12 @@ type AccountServer struct {
 	db *db.Database
 }
 
+// Client :- account client structure
+type Client struct {
+	conn    *grpc.ClientConn
+	service AccountServiceClient
+}
+
 // API :- base API strcture
 type API struct {
 	App           *app.App
