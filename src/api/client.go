@@ -6,13 +6,12 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/nirajgeorgian/account/src/model"
-	"github.com/nirajgeorgian/account/src/api"
 )
 
 // Client :- account client structure
 type Client struct {
 	conn    *grpc.ClientConn
-	service api.AccountServiceClient
+	service AccountServiceClient
 }
 
 func NewClient(url string) (*Client, error) {
@@ -20,14 +19,14 @@ func NewClient(url string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	c := api.NewAccountServiceClient(conn)
+	c := NewAccountServiceClient(conn)
 	return &Client{conn, c}, nil
 }
 
 func (c *Client) CreateAccount(ctx context.Context, account model.Account) (*model.Account, error) {
 	r, err := c.service.CreateAccount(
 		ctx,
-		&api.CreateAccountReq{Account: &account},
+		&CreateAccountReq{Account: &account},
 	)
 	if err != nil {
 		return nil, err
