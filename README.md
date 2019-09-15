@@ -41,3 +41,17 @@ Install go dependencies*
 make setup-go
 ```
 > these need to be managed outside of the vendor/ directory because they are used in proto code generation
+
+## Development
+> run the api's locally
+
+### Generate protos
+> After updating protobuf files, you need to regenerate dependent code
+```bash
+make protos
+```
+
+### Build Services
+```bash
+make build
+```
