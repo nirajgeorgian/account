@@ -1,17 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
-	"net"
 
 	proto "github.com/nirajgeorgian/account/src/api"
 	"github.com/nirajgeorgian/account/src/app"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 // Port :- port to listen application on
@@ -58,19 +54,10 @@ var serveCmd = &cobra.Command{
 
 		// serveRpc(api)
 		port := api.Config.Port
-		lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
-		if err != nil {
-			log.Fatalf("Failed to listen: %v", err)
-		}
 
-		grpcServer := grpc.NewServer()
-		proto.RegisterAccountServiceServer(grpcServer, &api.AccountServer)
-		reflection.Register(grpcServer)
-
-		fmt.Printf("starting to listen on tcp: %q\n", lis.Addr().String())
-		if err := grpcServer.Serve(lis); err != nil {
-			log.Fatalf("Failed to serve: %v\n", err)
-		}
+		if err := proto.ListenGRPC(api, port); err != nil {
+	    log.Fatalf("Failed to serve: %v\n", err)
+	   }
 
 		return nil
 	},

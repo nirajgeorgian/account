@@ -2,8 +2,11 @@ package api
 
 import (
 	"fmt"
+	"net"
 
-	context "golang.org/x/net/context"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 
 	app "github.com/nirajgeorgian/account/src/app"
 	db "github.com/nirajgeorgian/account/src/db"
@@ -16,9 +19,9 @@ type AccountServer struct {
 
 // API :- base API strcture
 type API struct {
-	AccountServer AccountServer
 	App           *app.App
 	Config        *Config
+	AccountServer AccountServer
 }
 
 // New :- new api instance
@@ -46,4 +49,18 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 	account := in.Account
 
 	return &CreateAccountRes{Account: account}, nil
+}
+
+func ListenGRPC(api *API, port int) error {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	if err != nil {
+		return err
+	}
+	grpcServer := grpc.NewServer()
+	RegisterAccountServiceServer(grpcServer, &api.AccountServer)
+	reflection.Register(grpcServer)
+
+	fmt.Printf("starting to listen on tcp: %q\n", lis.Addr().String())
+
+	return grpcServer.Serve(lis)
 }
