@@ -364,6 +364,8 @@
     "github.com/dgrijalva/jwt-go",
     "github.com/gogo/protobuf/gogoproto",
     "github.com/golang/protobuf/proto",
+    "github.com/golang/protobuf/ptypes",
+    "github.com/golang/protobuf/ptypes/timestamp",
     "github.com/infobloxopen/atlas-app-toolkit/gorm",
     "github.com/infobloxopen/protoc-gen-gorm/errors",
     "github.com/infobloxopen/protoc-gen-gorm/options",

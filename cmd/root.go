@@ -17,12 +17,20 @@ var Verbose bool
 // UseViper :- use viper for configuration
 var UseViper bool
 
+// JwySecret :- used as secret for encoding/decoding password
+var JwtSecret string
+
+// AccountServiceURI :- account service uri on which it is served
+var AccountServiceURI string
+
+
 func init() {
 	cobra.OnInitialize(initConfig)
 
 	RootCmd.PersistentFlags().StringVarP(&ConfigFile, "config", "c", "", "config file (default is config.yaml)")
 	RootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output (default is false)")
 	RootCmd.PersistentFlags().BoolVarP(&UseViper, "viper", "r", true, "Use Viper for configuration (default is true)")
+	RootCmd.PersistentFlags().StringVarP(&JwtSecret, "jwtsecret", "j", "dododuckN9", "jwt secret for encoding/decoding password")
 }
 
 func initConfig() {

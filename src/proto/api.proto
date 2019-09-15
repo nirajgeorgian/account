@@ -66,6 +66,6 @@ service AccountService {
   // rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
   // rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRes) {};
   // rpc ListAccounts (ListAccountsReq) returns (ListAccountsRes) {};
-  // rpc Auth(AuthReq) returns (AuthRes) {};
+  rpc Auth(AuthReq) returns (AuthRes) {};
   // rpc ValidateToken(ValidateTokenReq) returns (ValidateTokenRes) {};
 }

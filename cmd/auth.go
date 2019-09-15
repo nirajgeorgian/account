@@ -13,14 +13,14 @@ import (
 )
 
 func init() {
-  createAccount.Flags().StringVarP(&AccountServiceURI, "accountserviceuri", "u", "", "account service uri (required)")
-  createAccount.MarkFlagRequired("accountserviceuri")
+  createAuth.Flags().StringVarP(&AccountServiceURI, "accountserviceuri", "u", "localhost:3001", "account service uri (required)")
+  createAuth.MarkFlagRequired("accountserviceuri")
   viper.BindPFlag("accountserviceuri", createAccount.Flags().Lookup("accountserviceuri"))
 }
 
-var createAccount = &cobra.Command{
-  Use: "createAccount",
-  Short: "create an account with gRPC server on:3000",
+var createAuth = &cobra.Command{
+  Use: "auth",
+  Short: "authenticate an account with gRPC server on:3001",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		address     := viper.GetString("accountserviceuri")
 
@@ -42,16 +42,16 @@ var createAccount = &cobra.Command{
 			PasswordSalt: "test123",
 			Description: "dodo duck lives here",
 		}
-		r, err := c.CreateAccount(ctx, &api.CreateAccountReq{Account: &account})
+		r, err := c.Auth(ctx, &api.AuthReq{Account: &account})
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
-		log.Printf("Greeting: %s", r.Account.AccountId)
+		log.Printf("Greeting: %s", r.Token)
 
 		return nil
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(createAccount)
+	RootCmd.AddCommand(createAuth)
 }
