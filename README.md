@@ -18,7 +18,7 @@ export GOPATH="/Users/nirajgeorgian/Documents/go"
 export PATH=$PATH:$GOPATH/bin
 ```
 
-### > IMPORTANT! Make sure this repository is located at
+> ### IMPORTANT! Make sure this repository is located at
 ```bash
 $GOPATH/src/github.com/nirajgeorgian/account
 ```
