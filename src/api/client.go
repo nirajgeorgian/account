@@ -34,6 +34,17 @@ func (c *Client) CreateAccount(ctx context.Context, account model.Account) (*mod
 	return r.Account, nil
 }
 
+func (c *Client) Auth(ctx context.Context, account model.Account) (*AuthRes, error) {
+	r, err := c.service.Auth(
+		ctx,
+		&AuthReq{Account: &account},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
 func (c *Client) Close() {
 	c.conn.Close()
 }
