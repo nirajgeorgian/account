@@ -58,7 +58,7 @@ make build
 ```
 
 
-## running account service
+## Running account service
 > account service is build as an command line application.
 > After running `make build` run `./bin/server --help` to view available commands
 ```bash
