@@ -7,6 +7,7 @@
 *   Suspend an account
 
 ## Setup
+> Setup to start working on this project
 
 ### Install GoLang
 [version as of writing: go version go1.12.4 darwin/amd64](https://golang.org/)
