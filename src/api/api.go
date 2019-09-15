@@ -40,13 +40,12 @@ func New(a *app.App) (api *API, err error) {
 
 // CreateAccount :- CreateAccount rpc network call
 func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq) (*CreateAccountRes, error) {
-	fmt.Println("creating account")
+	fmt.Println("server: CreateAccount")
 
-	err := s.db.CreateAccount(ctx, in.Account)
+	account, err := s.db.CreateAccount(ctx, in.Account)
 	if err != nil {
 		return nil, err
 	}
-	account := in.Account
 
 	return &CreateAccountRes{Account: account}, nil
 }

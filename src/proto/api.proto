@@ -39,9 +39,33 @@ message DeleteAccountRes {
   bool success = 1;
 }
 
+message ListAccountsReq {}
+message ListAccountsRes {
+  repeated Account account = 1;
+}
+
+message AuthReq {
+  Account account = 1;
+}
+message AuthRes {
+  string token = 1;
+  bool valid = 2;
+}
+
+message ValidateTokenReq {
+  string token = 1;
+}
+message ValidateTokenRes {
+  string token = 1;
+  bool valid = 2;
+}
+
 service AccountService {
   rpc CreateAccount (CreateAccountReq) returns (CreateAccountRes) {};
   // rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
   // rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
   // rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRes) {};
+  // rpc ListAccounts (ListAccountsReq) returns (ListAccountsRes) {};
+  // rpc Auth(AuthReq) returns (AuthRes) {};
+  // rpc ValidateToken(ValidateTokenReq) returns (ValidateTokenRes) {};
 }

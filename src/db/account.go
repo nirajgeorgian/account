@@ -1,35 +1,52 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
+	"golang.org/x/crypto/bcrypt"
+	"github.com/satori/go.uuid"
 
 	"github.com/nirajgeorgian/account/src/model"
 )
 
 // CreateAccount :- create's an account
-func (db *Database) CreateAccount(ctx context.Context, in *model.Account) error {
+func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*model.Account, error) {
+	fmt.Println("database: CreateAccount")
 	tx := db.Begin()
 	accountORM, err := in.ToORM(ctx)
+
+	uuid := uuid.NewV4()
+	accountORM.AccountId = uuid.String()
+
 	if err != nil {
-		return errors.New("error converting input to ORM")
-	}
-	if err = tx.Create(&accountORM).Error; err != nil {
-		return errors.New("error creating job")
+		return nil, errors.New("error converting input to ORM")
 	}
 
-	_, err = accountORM.ToPB(ctx)
+	// hash password
+	hashedPass, err := bcrypt.GenerateFromPassword([]byte(accountORM.PasswordHash), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("error hashing password: %v", err))
+	}
+	accountORM.PasswordHash = string(hashedPass)
+
+	if err = tx.Create(&accountORM).Error; err != nil {
+		return nil, errors.New("error creating job")
+	}
+
+	account, err := accountORM.ToPB(ctx)
 	if err != nil {
 		tx.Rollback()
-		return errors.New("error converting back to PB")
+		return nil, errors.New("error converting back to PB")
 	}
 
 	if err = tx.Commit().Error; err != nil {
 		tx.Rollback()
-		return errors.New("error commiting job create coommit")
+		return nil, errors.New("error commiting job create coommit")
 	}
 
-	return nil
+	return &account, nil
 }
 
 // // ReadAccount :- read account profile

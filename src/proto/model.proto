@@ -3,8 +3,9 @@ package account;
 option go_package = "github.com/nirajgeorgian/account/src/model;model";
 
 import "github.com/infobloxopen/protoc-gen-gorm/options/gorm.proto";
-
+import "google/protobuf/timestamp.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
 option (gogoproto.goproto_registration) = true;
 
 message Account {
@@ -16,4 +17,7 @@ message Account {
   string password_hash = 4;
   string password_salt = 5;
   string description = 6 [(gorm.field).tag = { type: "varchar(512)" }];
+
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }

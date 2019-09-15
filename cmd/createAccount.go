@@ -38,7 +38,6 @@ var createAccount = &cobra.Command{
 		defer cancel()
 
 		account := model.Account{
-			AccountId: "1",
 			Username: "test",
 			Email: "test",
 			PasswordHash: "test123",
