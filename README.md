@@ -25,10 +25,8 @@ $GOPATH/src/github.com/nirajgeorgian/account
 
 ### Install protobuf
 Mac: `make setup-protobuf-mac`
-
 Linux: `make setup-protobuf-linux`
-
-*   See: [Error](http://google.github.io/proto-lens/installing-protoc.html) if there are any failures
+>   See: [Error](http://google.github.io/proto-lens/installing-protoc.html) if there are any failures
 
 ### Setup Go environment
 
@@ -42,4 +40,4 @@ Install go dependencies*
 ```bash
 make setup-go
 ```
-* these need to be managed outside of the vendor/ directory because they are used in proto code generation
+> these need to be managed outside of the vendor/ directory because they are used in proto code generation
