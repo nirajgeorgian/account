@@ -56,3 +56,30 @@ make protos
 ```bash
 make build
 ```
+
+
+## running account service
+> account service is build as an command line application.
+> After running `make build` run `./bin/server --help` to view available commands
+```bash
+account service is responsible for CRUD with account entity
+
+Usage:
+  account [flags]
+  account [command]
+
+Available Commands:
+  createAccount create an account with gRPC server on:3000
+  help          Help about any command
+  serve         serves the gRPC server
+  version       Print the account service version
+
+Flags:
+  -c, --config string   config file (default is config.yaml)
+  -h, --help            help for account
+  -v, --verbose         verbose output (default is false)
+  -r, --viper           Use Viper for configuration (default is true) (default true)
+
+Use "account [command] --help" for more information about a command.
+```
+> use is like this `./bin/server [command] [flags]`
