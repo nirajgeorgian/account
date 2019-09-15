@@ -83,3 +83,23 @@ Flags:
 Use "account [command] --help" for more information about a command.
 ```
 > use is like this `./bin/server [command] [flags]`
+
+> ### ex: `./bin/server server --help`
+```bash
+start the gRPC server on provided port along with the provided database URI
+
+Usage:
+  account serve [flags]
+
+Flags:
+  -d, --databaseuri string   database URI for postgresql (required)
+  -h, --help                 help for serve
+  -p, --port int             port configuration for this application (default 3000)
+  -x, --proxycount string    no. of proxy count
+  -k, --secretkey string     secret key for application (required) (default "dododuckN9")
+
+Global Flags:
+  -c, --config string   config file (default is config.yaml)
+  -v, --verbose         verbose output (default is false)
+  -r, --viper           Use Viper for configuration (default is true) (default true)
+```
