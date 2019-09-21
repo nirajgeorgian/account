@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -11,30 +12,43 @@ import (
 
 // ConfigFile :- default config file
 var ConfigFile string
-
 // Verbose :- show default output error
 var Verbose bool
-
 // UseViper :- use viper for configuration
 var UseViper bool
-
 // JwySecret :- used as secret for encoding/decoding password
 var JwtSecret string
-
 // AccountServiceURI :- account service uri on which it is served
 var AccountServiceURI string
-
 // Logger for entire application
 var Logger = log.Logger{}
+// Environment variable default to development
+var Environment string
 
 
 func init() {
 	cobra.OnInitialize(initConfig)
 
 	RootCmd.PersistentFlags().StringVarP(&ConfigFile, "config", "c", "", "config file (default is config.yaml)")
+	RootCmd.PersistentFlags().StringVarP(&Environment, "environment", "e", "development", "Environment variable (default is development)")
 	RootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output (default is false)")
 	RootCmd.PersistentFlags().BoolVarP(&UseViper, "viper", "r", true, "Use Viper for configuration (default is true)")
 	RootCmd.PersistentFlags().StringVarP(&JwtSecret, "jwtsecret", "j", "dododuckN9", "jwt secret for encoding/decoding password")
+
+  log.SetFormatter(&log.JSONFormatter{
+		FieldMap: log.FieldMap{
+			log.FieldKeyTime:  "timestamp",
+			log.FieldKeyLevel: "severity",
+			log.FieldKeyMsg:   "message",
+		},
+		TimestampFormat: time.RFC3339Nano,
+	})
+  log.SetOutput(os.Stdout)
+	if Environment == "production" {
+		log.SetLevel(log.WarnLevel)
+	} else {
+		log.SetLevel(log.InfoLevel)
+	}
 
 	log.Infof("Successfully initialized account service")
 
