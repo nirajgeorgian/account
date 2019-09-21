@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
@@ -23,7 +24,7 @@ func CheckPasswordHash(password, hash string) bool {
 
 // CreateAccount :- create's an account
 func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*model.Account, error) {
-	fmt.Println("database: CreateAccount")
+	log.Println("database: CreateAccount")
 	tx := db.Begin()
 	accountORM, err := in.ToORM(ctx)
 	if err != nil {
@@ -59,7 +60,7 @@ func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*mode
 }
 
 func (db *Database) Auth(ctx context.Context, in *model.Account) (*model.Account, error) {
-	fmt.Println("database: Auth")
+	log.Println("database: Auth")
 	accountORM, err := in.ToORM(ctx)
 	if err != nil {
 		return nil, errors.New("error converting input to ORM")

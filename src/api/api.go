@@ -3,9 +3,14 @@ package api
 import (
 	"fmt"
 	"net"
+	"time"
+
+	log "github.com/Sirupsen/logrus"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"google.golang.org/grpc/reflection"
 
 	app "github.com/nirajgeorgian/account/src/app"
@@ -40,7 +45,7 @@ func New(a *app.App) (api *API, err error) {
 
 // CreateAccount :- CreateAccount rpc network call
 func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq) (*CreateAccountRes, error) {
-	fmt.Println("server: CreateAccount")
+	log.Println("server: CreateAccount")
 
 	account, err := s.db.CreateAccount(ctx, in.Account)
 	if err != nil {
@@ -55,17 +60,34 @@ func ListenGRPC(api *API, port int) error {
 	if err != nil {
 		return err
 	}
-	grpcServer := grpc.NewServer()
+
+	recoveryFunc := func(p interface{}) (err error) {
+		log.Errorf("recovered from panic: %v", p)
+		return fmt.Errorf("recovered from panic: %v", p)
+	}
+	recoveryOpts := []grpc_recovery.Option{
+		grpc_recovery.WithRecoveryHandler(recoveryFunc),
+	}
+	grpcServer := grpc.NewServer(
+		grpc.ConnectionTimeout(time.Minute*30),
+		grpc.MaxRecvMsgSize(1024*1024*128),
+		grpc_middleware.WithUnaryServerChain(
+			grpc_recovery.UnaryServerInterceptor(recoveryOpts...),
+		),
+		grpc_middleware.WithStreamServerChain(
+			grpc_recovery.StreamServerInterceptor(recoveryOpts...),
+		),
+	)
 	RegisterAccountServiceServer(grpcServer, &api.AccountServer)
 	reflection.Register(grpcServer)
 
-	fmt.Printf("starting to listen on tcp: %q\n", lis.Addr().String())
+	log.Printf("starting HTTP/2 gRPC API server: %q\n", lis.Addr().String())
 
 	return grpcServer.Serve(lis)
 }
 
 func (s *AccountServer) Auth(ctx context.Context, in *AuthReq) (*AuthRes, error) {
-	fmt.Println("server: Auth")
+	log.Println("server: Auth")
 
 	account, err := s.db.Auth(ctx, in.Account)
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	log "github.com/Sirupsen/logrus"
 )
 
 // ConfigFile :- default config file
@@ -23,6 +24,9 @@ var JwtSecret string
 // AccountServiceURI :- account service uri on which it is served
 var AccountServiceURI string
 
+// Logger for entire application
+var Logger = log.Logger{}
+
 
 func init() {
 	cobra.OnInitialize(initConfig)
@@ -31,6 +35,9 @@ func init() {
 	RootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output (default is false)")
 	RootCmd.PersistentFlags().BoolVarP(&UseViper, "viper", "r", true, "Use Viper for configuration (default is true)")
 	RootCmd.PersistentFlags().StringVarP(&JwtSecret, "jwtsecret", "j", "dododuckN9", "jwt secret for encoding/decoding password")
+
+	log.Infof("Successfully initialized account service")
+
 }
 
 func initConfig() {
