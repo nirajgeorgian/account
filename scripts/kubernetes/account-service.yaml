@@ -17,6 +17,7 @@ spec:
       containers:
         - name: account
           image: nirajgeorgian/account:latest
+          imagePullPolicy: "Always"
           ports:
             - name: account-service
               containerPort: 3001
