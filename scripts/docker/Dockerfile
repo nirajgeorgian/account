@@ -27,5 +27,5 @@ COPY --from=builder /go/src/github.com/nirajgeorgian/account/main .
 
 # Use an unprivileged user.
 USER accountuser
-EXPOSE 3000
+EXPOSE 3001
 CMD ["./main", "serve"]
