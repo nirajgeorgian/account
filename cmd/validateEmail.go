@@ -9,18 +9,17 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	api "github.com/nirajgeorgian/account/src/api"
-	model "github.com/nirajgeorgian/account/src/model"
 )
 
 func init() {
-  createAccount.Flags().StringVarP(&accountServiceURI, "accountserviceuri", "u", "", "account service uri (required)")
-  createAccount.MarkFlagRequired("accountserviceuri")
+  validateEmail.Flags().StringVarP(&accountServiceURI, "accountserviceuri", "u", "", "account service uri (required)")
+  validateEmail.MarkFlagRequired("accountserviceuri")
   viper.BindPFlag("accountserviceuri", createAccount.Flags().Lookup("accountserviceuri"))
 }
 
-var createAccount = &cobra.Command{
-  Use: "createAccount",
-  Short: "create an account with gRPC server on:3000",
+var validateEmail = &cobra.Command{
+  Use: "validateEmail",
+  Short: "validate an account with email with gRPC server on:3000",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		address     := viper.GetString("accountserviceuri")
 
@@ -35,24 +34,16 @@ var createAccount = &cobra.Command{
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
-		account := model.Account{
-			AccountId: "2",
-			Username: "dododuck",
-			Email: "dododuck@example.com",
-			PasswordHash: "test123",
-			PasswordSalt: "test123",
-			Description: "dodo duck lives here",
-		}
-		r, err := c.CreateAccount(ctx, &api.CreateAccountReq{Account: &account})
+		r, err := c.ValidateEmail(ctx, &api.ValidateEmailReq{Email: "dododuck@example.com"})
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
-		log.Printf("Greeting: %s", r.Account.AccountId)
+		log.Printf("Greeting: %t", r.Success)
 
 		return nil
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(createAccount)
+	RootCmd.AddCommand(validateEmail)
 }

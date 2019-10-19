@@ -32,11 +32,25 @@ message UpdateAccountRes {
   Account account = 2;
 }
 
-// delete an account
-message DeleteAccountReq {
-  string account_id = 1;
+message AuthReq {
+  Account account = 1;
 }
-message DeleteAccountRes {
+message AuthRes {
+  string token = 1;
+  bool valid = 2;
+}
+
+message ValidateUsernameReq {
+  string username = 1;
+}
+message ValidateUsernameRes {
+  bool success = 1;
+}
+
+message ValidateEmailReq {
+  string email = 1;
+}
+message ValidateEmailRes {
   bool success = 1;
 }
 
@@ -44,5 +58,7 @@ service AccountService {
   rpc CreateAccount (CreateAccountReq) returns (CreateAccountRes) {};
   rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
   rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
-  // rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRes) {};
+  // rpc Auth(AuthReq) returns (AuthRes) {};
+  rpc ValidateUsername(ValidateUsernameReq) returns (ValidateUsernameRes) {};
+  rpc ValidateEmail(ValidateEmailReq) returns (ValidateEmailRes) {};
 }

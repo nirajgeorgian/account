@@ -7,6 +7,32 @@ import (
 	"github.com/nirajgeorgian/account/src/model"
 )
 
+func (db *Database) ValidateUsername(ctx context.Context, username string) (bool, error) {
+	var accountORM []*model.AccountORM
+	if err := db.First(&accountORM, "username = ?", username).Error; err != nil {
+		return false, errors.New("error fetching account")
+	}
+
+	if len(accountORM) > 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func (db *Database) ValidateEmail(ctx context.Context, email string) (bool, error) {
+	var accountORM []*model.AccountORM
+	if err := db.First(&accountORM, "email = ?", email).Error; err != nil {
+		return false, errors.New("error fetching account")
+	}
+
+	if len(accountORM) > 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 // CreateAccount :- create's an account
 func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*model.Account, error) {
 	tx := db.Begin()

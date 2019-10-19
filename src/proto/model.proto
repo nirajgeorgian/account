@@ -16,4 +16,5 @@ message Account {
   string password_hash = 4;
   string password_salt = 5;
   string description = 6 [(gorm.field).tag = { type: "varchar(512)" }];
+  bool verified = 7 [(gorm.field).tag = { type: "boolean" }];
 }

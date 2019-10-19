@@ -44,6 +44,28 @@ func New(a *app.App) (api *API, err error) {
 	return api, nil
 }
 
+func (s *AccountServer) ValidateUsername(ctx context.Context, in *ValidateUsernameReq) (*ValidateUsernameRes, error) {
+	fmt.Println("validating username")
+
+	success, err := s.db.ValidateUsername(ctx, in.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ValidateUsernameRes{Success: success}, nil
+}
+
+func (s *AccountServer) ValidateEmail(ctx context.Context, in *ValidateEmailReq) (*ValidateEmailRes, error) {
+	fmt.Println("validating email")
+
+	success, err := s.db.ValidateEmail(ctx, in.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ValidateEmailRes{Success: success}, nil
+}
+
 // CreateAccount :- CreateAccount rpc network call
 func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq) (*CreateAccountRes, error) {
 	fmt.Println("creating account")

@@ -18,8 +18,8 @@ func init() {
 }
 
 var readAccount = &cobra.Command{
-  Use: "listAccount",
-  Short: "listAccount an account with gRPC server on:3000",
+  Use: "readAccount",
+  Short: "readAccount an account with gRPC server on:3000",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		address     := viper.GetString("accountserviceuri")
 
