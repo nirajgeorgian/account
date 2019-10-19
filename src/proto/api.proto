@@ -66,4 +66,6 @@ service AccountService {
   rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
   rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
   rpc Auth(AuthReq) returns (AuthRes) {};
+  rpc ValidateUsername(ValidateUsernameReq) return (ValidateUsernameRes) {};
+  rpc ValidateEmail(ValidateEmailReq) returns (ValidateEmailRes) {};
 }
