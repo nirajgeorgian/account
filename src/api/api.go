@@ -67,7 +67,7 @@ func (s *AccountServer) UpdateAccount(ctx context.Context, in *UpdateAccountReq)
 }
 
 func (s *AccountServer) ReadAccount(ctx context.Context, in *ReadAccountReq) (*ReadAccountRes, error) {
-	fmt.Println("reading profile")
+	fmt.Println("reading single profile")
 
 	account, err := s.db.ReadAccount(ctx, in.AccountId)
 	if err != nil {
