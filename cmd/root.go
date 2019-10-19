@@ -26,6 +26,9 @@ var Logger = log.Logger{}
 var Environment string
 
 
+// accountServiceURI :- account service microservice URI
+var accountServiceURI string
+
 func init() {
 	cobra.OnInitialize(initConfig)
 

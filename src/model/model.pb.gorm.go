@@ -37,7 +37,7 @@ type AccountORM struct {
 	CreatedAt    *time.Time
 	Description  string `gorm:"type:varchar(512)"`
 	Email        string `gorm:"type:varchar(120)"`
-	PasswordHash string
+	PasswordHash string `gorm:"type:varchar(120)"`
 	PasswordSalt string
 	UpdatedAt    *time.Time
 	Username     string `gorm:"type:varchar(120)"`
