@@ -34,6 +34,28 @@ func (c *Client) CreateAccount(ctx context.Context, account model.Account) (*mod
 	return r.Account, nil
 }
 
+func (c *Client) UpdateAccount(ctx context.Context, account model.Account) (*UpdateAccountRes, error) {
+	r, err := c.service.UpdateAccount(
+		ctx,
+		&UpdateAccountReq{Account: &account},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
+func (c *Client) ReadAccount(ctx context.Context, account_id string) (*ReadAccountRes, error) {
+	r, err := c.service.ReadAccount(
+		ctx,
+		&ReadAccountReq{AccountId: account_id},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
 func (c *Client) Auth(ctx context.Context, account model.Account) (*AuthRes, error) {
 	r, err := c.service.Auth(
 		ctx,
