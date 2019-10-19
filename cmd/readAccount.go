@@ -18,8 +18,8 @@ func init() {
 }
 
 var readAccount = &cobra.Command{
-  Use: "listAccount",
-  Short: "listAccount an account with gRPC server on:3000",
+  Use: "readAccount",
+  Short: "readAccount an account with gRPC server on:3000",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		address     := viper.GetString("accountserviceuri")
 
@@ -34,7 +34,7 @@ var readAccount = &cobra.Command{
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
-		r, err := c.ReadAccount(ctx, &api.ReadAccountReq{AccountId: "1"})
+		r, err := c.ReadAccount(ctx, &api.ReadAccountReq{AccountId: "8f48be25-7b21-471c-a8dc-562adec0835e"})
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
