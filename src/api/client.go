@@ -56,6 +56,28 @@ func (c *Client) ReadAccount(ctx context.Context, account_id string) (*ReadAccou
 	return r, nil
 }
 
+func (c *Client) ValidateUsername(ctx context.Context, username string) (*ValidateUsernameRes, error) {
+	r, err := c.service.ValidateUsername(
+		ctx,
+		&ValidateUsername{Username: username},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
+func (c *Client) ValidateEmail(ctx context.Context, email string) (*ValidateEmailRes, error) {
+	r, err := c.service.ValidateEmail(
+		ctx,
+		&ValidateEmailRes{Email: email},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
 func (c *Client) Auth(ctx context.Context, account model.Account) (*AuthRes, error) {
 	r, err := c.service.Auth(
 		ctx,
