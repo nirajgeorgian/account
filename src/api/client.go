@@ -59,7 +59,7 @@ func (c *Client) ReadAccount(ctx context.Context, account_id string) (*ReadAccou
 func (c *Client) ValidateUsername(ctx context.Context, username string) (*ValidateUsernameRes, error) {
 	r, err := c.service.ValidateUsername(
 		ctx,
-		&ValidateUsername{Username: username},
+		&ValidateUsernameReq{Username: username},
 	)
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (c *Client) ValidateUsername(ctx context.Context, username string) (*Valida
 func (c *Client) ValidateEmail(ctx context.Context, email string) (*ValidateEmailRes, error) {
 	r, err := c.service.ValidateEmail(
 		ctx,
-		&ValidateEmailRes{Email: email},
+		&ValidateEmailReq{Email: email},
 	)
 	if err != nil {
 		return nil, err
