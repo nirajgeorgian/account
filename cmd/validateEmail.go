@@ -12,14 +12,14 @@ import (
 )
 
 func init() {
-  readAccount.Flags().StringVarP(&accountServiceURI, "accountserviceuri", "u", "", "account service uri (required)")
-  readAccount.MarkFlagRequired("accountserviceuri")
+  validateEmail.Flags().StringVarP(&accountServiceURI, "accountserviceuri", "u", "", "account service uri (required)")
+  validateEmail.MarkFlagRequired("accountserviceuri")
   viper.BindPFlag("accountserviceuri", createAccount.Flags().Lookup("accountserviceuri"))
 }
 
-var readAccount = &cobra.Command{
-  Use: "readAccount",
-  Short: "readAccount an account with gRPC server on:3000",
+var validateEmail = &cobra.Command{
+  Use: "validateEmail",
+  Short: "validate an account with email with gRPC server on:3000",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		address     := viper.GetString("accountserviceuri")
 
@@ -31,19 +31,19 @@ var readAccount = &cobra.Command{
 		defer conn.Close()
 		c := api.NewAccountServiceClient(conn)
 
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
 		defer cancel()
 
-		r, err := c.ReadAccount(ctx, &api.ReadAccountReq{AccountId: "8f48be25-7b21-471c-a8dc-562adec0835e"})
+		r, err := c.ValidateEmail(ctx, &api.ValidateEmailReq{Email: "dododuck@example.com"})
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
-		log.Printf("Greeting: %s", r.Account)
+		log.Printf("Greeting: %t", r.Success)
 
 		return nil
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(readAccount)
+	RootCmd.AddCommand(validateEmail)
 }

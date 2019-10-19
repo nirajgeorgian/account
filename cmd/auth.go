@@ -32,13 +32,13 @@ var createAuth = &cobra.Command{
 		defer conn.Close()
 		c := api.NewAccountServiceClient(conn)
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
 		account := model.Account{
-			Username: "test",
-			Email: "test",
-			PasswordHash: "passwordtest123",
+			Username: "dododuck",
+			Email: "dododuck@example.com",
+			PasswordHash: "test123",
 			PasswordSalt: "test123",
 			Description: "dodo duck lives here",
 		}

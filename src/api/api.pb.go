@@ -269,155 +269,7 @@ func (m *UpdateAccountRes) GetAccount() *model.Account {
 	return nil
 }
 
-// delete an account
-type DeleteAccountReq struct {
-	AccountId            string   `protobuf:"bytes,1,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DeleteAccountReq) Reset()         { *m = DeleteAccountReq{} }
-func (m *DeleteAccountReq) String() string { return proto.CompactTextString(m) }
-func (*DeleteAccountReq) ProtoMessage()    {}
-func (*DeleteAccountReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{6}
-}
-
-func (m *DeleteAccountReq) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteAccountReq.Unmarshal(m, b)
-}
-func (m *DeleteAccountReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteAccountReq.Marshal(b, m, deterministic)
-}
-func (m *DeleteAccountReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteAccountReq.Merge(m, src)
-}
-func (m *DeleteAccountReq) XXX_Size() int {
-	return xxx_messageInfo_DeleteAccountReq.Size(m)
-}
-func (m *DeleteAccountReq) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteAccountReq.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DeleteAccountReq proto.InternalMessageInfo
-
-func (m *DeleteAccountReq) GetAccountId() string {
-	if m != nil {
-		return m.AccountId
-	}
-	return ""
-}
-
-type DeleteAccountRes struct {
-	Success              bool     `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DeleteAccountRes) Reset()         { *m = DeleteAccountRes{} }
-func (m *DeleteAccountRes) String() string { return proto.CompactTextString(m) }
-func (*DeleteAccountRes) ProtoMessage()    {}
-func (*DeleteAccountRes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{7}
-}
-
-func (m *DeleteAccountRes) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteAccountRes.Unmarshal(m, b)
-}
-func (m *DeleteAccountRes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteAccountRes.Marshal(b, m, deterministic)
-}
-func (m *DeleteAccountRes) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteAccountRes.Merge(m, src)
-}
-func (m *DeleteAccountRes) XXX_Size() int {
-	return xxx_messageInfo_DeleteAccountRes.Size(m)
-}
-func (m *DeleteAccountRes) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteAccountRes.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DeleteAccountRes proto.InternalMessageInfo
-
-func (m *DeleteAccountRes) GetSuccess() bool {
-	if m != nil {
-		return m.Success
-	}
-	return false
-}
-
-type ListAccountsReq struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ListAccountsReq) Reset()         { *m = ListAccountsReq{} }
-func (m *ListAccountsReq) String() string { return proto.CompactTextString(m) }
-func (*ListAccountsReq) ProtoMessage()    {}
-func (*ListAccountsReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{8}
-}
-
-func (m *ListAccountsReq) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListAccountsReq.Unmarshal(m, b)
-}
-func (m *ListAccountsReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListAccountsReq.Marshal(b, m, deterministic)
-}
-func (m *ListAccountsReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListAccountsReq.Merge(m, src)
-}
-func (m *ListAccountsReq) XXX_Size() int {
-	return xxx_messageInfo_ListAccountsReq.Size(m)
-}
-func (m *ListAccountsReq) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListAccountsReq.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListAccountsReq proto.InternalMessageInfo
-
-type ListAccountsRes struct {
-	Account              []*model.Account `protobuf:"bytes,1,rep,name=account,proto3" json:"account,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
-	XXX_unrecognized     []byte           `json:"-"`
-	XXX_sizecache        int32            `json:"-"`
-}
-
-func (m *ListAccountsRes) Reset()         { *m = ListAccountsRes{} }
-func (m *ListAccountsRes) String() string { return proto.CompactTextString(m) }
-func (*ListAccountsRes) ProtoMessage()    {}
-func (*ListAccountsRes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{9}
-}
-
-func (m *ListAccountsRes) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ListAccountsRes.Unmarshal(m, b)
-}
-func (m *ListAccountsRes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ListAccountsRes.Marshal(b, m, deterministic)
-}
-func (m *ListAccountsRes) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListAccountsRes.Merge(m, src)
-}
-func (m *ListAccountsRes) XXX_Size() int {
-	return xxx_messageInfo_ListAccountsRes.Size(m)
-}
-func (m *ListAccountsRes) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListAccountsRes.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ListAccountsRes proto.InternalMessageInfo
-
-func (m *ListAccountsRes) GetAccount() []*model.Account {
-	if m != nil {
-		return m.Account
-	}
-	return nil
-}
-
+// auth for account
 type AuthReq struct {
 	Account              *model.Account `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
@@ -429,7 +281,7 @@ func (m *AuthReq) Reset()         { *m = AuthReq{} }
 func (m *AuthReq) String() string { return proto.CompactTextString(m) }
 func (*AuthReq) ProtoMessage()    {}
 func (*AuthReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{10}
+	return fileDescriptor_00212fb1f9d3bf1c, []int{6}
 }
 
 func (m *AuthReq) XXX_Unmarshal(b []byte) error {
@@ -469,7 +321,7 @@ func (m *AuthRes) Reset()         { *m = AuthRes{} }
 func (m *AuthRes) String() string { return proto.CompactTextString(m) }
 func (*AuthRes) ProtoMessage()    {}
 func (*AuthRes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{11}
+	return fileDescriptor_00212fb1f9d3bf1c, []int{7}
 }
 
 func (m *AuthRes) XXX_Unmarshal(b []byte) error {
@@ -504,88 +356,158 @@ func (m *AuthRes) GetValid() bool {
 	return false
 }
 
-type ValidateTokenReq struct {
-	Token                string   `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+type ValidateUsernameReq struct {
+	Username             string   `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ValidateTokenReq) Reset()         { *m = ValidateTokenReq{} }
-func (m *ValidateTokenReq) String() string { return proto.CompactTextString(m) }
-func (*ValidateTokenReq) ProtoMessage()    {}
-func (*ValidateTokenReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{12}
+func (m *ValidateUsernameReq) Reset()         { *m = ValidateUsernameReq{} }
+func (m *ValidateUsernameReq) String() string { return proto.CompactTextString(m) }
+func (*ValidateUsernameReq) ProtoMessage()    {}
+func (*ValidateUsernameReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{8}
 }
 
-func (m *ValidateTokenReq) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ValidateTokenReq.Unmarshal(m, b)
+func (m *ValidateUsernameReq) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ValidateUsernameReq.Unmarshal(m, b)
 }
-func (m *ValidateTokenReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ValidateTokenReq.Marshal(b, m, deterministic)
+func (m *ValidateUsernameReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ValidateUsernameReq.Marshal(b, m, deterministic)
 }
-func (m *ValidateTokenReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidateTokenReq.Merge(m, src)
+func (m *ValidateUsernameReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValidateUsernameReq.Merge(m, src)
 }
-func (m *ValidateTokenReq) XXX_Size() int {
-	return xxx_messageInfo_ValidateTokenReq.Size(m)
+func (m *ValidateUsernameReq) XXX_Size() int {
+	return xxx_messageInfo_ValidateUsernameReq.Size(m)
 }
-func (m *ValidateTokenReq) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidateTokenReq.DiscardUnknown(m)
+func (m *ValidateUsernameReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateUsernameReq.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ValidateTokenReq proto.InternalMessageInfo
+var xxx_messageInfo_ValidateUsernameReq proto.InternalMessageInfo
 
-func (m *ValidateTokenReq) GetToken() string {
+func (m *ValidateUsernameReq) GetUsername() string {
 	if m != nil {
-		return m.Token
+		return m.Username
 	}
 	return ""
 }
 
-type ValidateTokenRes struct {
-	Token                string   `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
-	Valid                bool     `protobuf:"varint,2,opt,name=valid,proto3" json:"valid,omitempty"`
+type ValidateUsernameRes struct {
+	Success              bool     `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ValidateTokenRes) Reset()         { *m = ValidateTokenRes{} }
-func (m *ValidateTokenRes) String() string { return proto.CompactTextString(m) }
-func (*ValidateTokenRes) ProtoMessage()    {}
-func (*ValidateTokenRes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{13}
+func (m *ValidateUsernameRes) Reset()         { *m = ValidateUsernameRes{} }
+func (m *ValidateUsernameRes) String() string { return proto.CompactTextString(m) }
+func (*ValidateUsernameRes) ProtoMessage()    {}
+func (*ValidateUsernameRes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{9}
 }
 
-func (m *ValidateTokenRes) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ValidateTokenRes.Unmarshal(m, b)
+func (m *ValidateUsernameRes) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ValidateUsernameRes.Unmarshal(m, b)
 }
-func (m *ValidateTokenRes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ValidateTokenRes.Marshal(b, m, deterministic)
+func (m *ValidateUsernameRes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ValidateUsernameRes.Marshal(b, m, deterministic)
 }
-func (m *ValidateTokenRes) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidateTokenRes.Merge(m, src)
+func (m *ValidateUsernameRes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValidateUsernameRes.Merge(m, src)
 }
-func (m *ValidateTokenRes) XXX_Size() int {
-	return xxx_messageInfo_ValidateTokenRes.Size(m)
+func (m *ValidateUsernameRes) XXX_Size() int {
+	return xxx_messageInfo_ValidateUsernameRes.Size(m)
 }
-func (m *ValidateTokenRes) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidateTokenRes.DiscardUnknown(m)
+func (m *ValidateUsernameRes) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateUsernameRes.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ValidateTokenRes proto.InternalMessageInfo
+var xxx_messageInfo_ValidateUsernameRes proto.InternalMessageInfo
 
-func (m *ValidateTokenRes) GetToken() string {
+func (m *ValidateUsernameRes) GetSuccess() bool {
 	if m != nil {
-		return m.Token
+		return m.Success
+	}
+	return false
+}
+
+type ValidateEmailReq struct {
+	Email                string   `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ValidateEmailReq) Reset()         { *m = ValidateEmailReq{} }
+func (m *ValidateEmailReq) String() string { return proto.CompactTextString(m) }
+func (*ValidateEmailReq) ProtoMessage()    {}
+func (*ValidateEmailReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{10}
+}
+
+func (m *ValidateEmailReq) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ValidateEmailReq.Unmarshal(m, b)
+}
+func (m *ValidateEmailReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ValidateEmailReq.Marshal(b, m, deterministic)
+}
+func (m *ValidateEmailReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValidateEmailReq.Merge(m, src)
+}
+func (m *ValidateEmailReq) XXX_Size() int {
+	return xxx_messageInfo_ValidateEmailReq.Size(m)
+}
+func (m *ValidateEmailReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateEmailReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ValidateEmailReq proto.InternalMessageInfo
+
+func (m *ValidateEmailReq) GetEmail() string {
+	if m != nil {
+		return m.Email
 	}
 	return ""
 }
 
-func (m *ValidateTokenRes) GetValid() bool {
+type ValidateEmailRes struct {
+	Success              bool     `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ValidateEmailRes) Reset()         { *m = ValidateEmailRes{} }
+func (m *ValidateEmailRes) String() string { return proto.CompactTextString(m) }
+func (*ValidateEmailRes) ProtoMessage()    {}
+func (*ValidateEmailRes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{11}
+}
+
+func (m *ValidateEmailRes) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ValidateEmailRes.Unmarshal(m, b)
+}
+func (m *ValidateEmailRes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ValidateEmailRes.Marshal(b, m, deterministic)
+}
+func (m *ValidateEmailRes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValidateEmailRes.Merge(m, src)
+}
+func (m *ValidateEmailRes) XXX_Size() int {
+	return xxx_messageInfo_ValidateEmailRes.Size(m)
+}
+func (m *ValidateEmailRes) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateEmailRes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ValidateEmailRes proto.InternalMessageInfo
+
+func (m *ValidateEmailRes) GetSuccess() bool {
 	if m != nil {
-		return m.Valid
+		return m.Success
 	}
 	return false
 }
@@ -597,46 +519,46 @@ func init() {
 	proto.RegisterType((*ReadAccountRes)(nil), "account.ReadAccountRes")
 	proto.RegisterType((*UpdateAccountReq)(nil), "account.UpdateAccountReq")
 	proto.RegisterType((*UpdateAccountRes)(nil), "account.UpdateAccountRes")
-	proto.RegisterType((*DeleteAccountReq)(nil), "account.DeleteAccountReq")
-	proto.RegisterType((*DeleteAccountRes)(nil), "account.DeleteAccountRes")
-	proto.RegisterType((*ListAccountsReq)(nil), "account.ListAccountsReq")
-	proto.RegisterType((*ListAccountsRes)(nil), "account.ListAccountsRes")
 	proto.RegisterType((*AuthReq)(nil), "account.AuthReq")
 	proto.RegisterType((*AuthRes)(nil), "account.AuthRes")
-	proto.RegisterType((*ValidateTokenReq)(nil), "account.ValidateTokenReq")
-	proto.RegisterType((*ValidateTokenRes)(nil), "account.ValidateTokenRes")
+	proto.RegisterType((*ValidateUsernameReq)(nil), "account.ValidateUsernameReq")
+	proto.RegisterType((*ValidateUsernameRes)(nil), "account.ValidateUsernameRes")
+	proto.RegisterType((*ValidateEmailReq)(nil), "account.ValidateEmailReq")
+	proto.RegisterType((*ValidateEmailRes)(nil), "account.ValidateEmailRes")
 }
 
 func init() { proto.RegisterFile("api.proto", fileDescriptor_00212fb1f9d3bf1c) }
 
 var fileDescriptor_00212fb1f9d3bf1c = []byte{
-	// 416 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0xcb, 0x6a, 0xe3, 0x30,
-	0x14, 0x4d, 0x32, 0x8f, 0x24, 0x37, 0x24, 0xe3, 0x11, 0x03, 0x93, 0x31, 0xcc, 0x30, 0x78, 0x15,
-	0x86, 0x8c, 0x4d, 0x53, 0xba, 0xea, 0x03, 0xd2, 0x16, 0x42, 0xa1, 0x2b, 0xf7, 0x41, 0xe9, 0xa6,
-	0x28, 0xb6, 0xea, 0xa8, 0x4d, 0x2c, 0xc7, 0x92, 0xf3, 0x23, 0xfd, 0xa1, 0xfe, 0x4b, 0x7f, 0xa4,
-	0x48, 0xb6, 0x83, 0xed, 0xbc, 0x70, 0x77, 0x3a, 0xf7, 0xde, 0x73, 0x74, 0x5f, 0x12, 0x34, 0x71,
-	0x40, 0xcd, 0x20, 0x64, 0x82, 0xa1, 0x3a, 0x76, 0x1c, 0x16, 0xf9, 0x42, 0xff, 0xef, 0x51, 0x31,
-	0x89, 0xc6, 0xa6, 0xc3, 0x66, 0x96, 0xc7, 0x3c, 0x66, 0x29, 0xff, 0x38, 0x7a, 0x54, 0x48, 0x01,
-	0x75, 0x8a, 0x79, 0x7a, 0x6b, 0xc6, 0x5c, 0x32, 0x8d, 0x81, 0x71, 0x02, 0xda, 0x59, 0x48, 0xb0,
-	0x20, 0xc3, 0x58, 0xcc, 0x26, 0x73, 0xf4, 0x0f, 0x52, 0xe9, 0x6e, 0xf5, 0x6f, 0xb5, 0xd7, 0x1a,
-	0x68, 0x66, 0x82, 0xcd, 0x34, 0x2a, 0x0d, 0x58, 0xc3, 0xe7, 0xa5, 0xf8, 0x16, 0x74, 0x6c, 0x82,
-	0xdd, 0xcc, 0xed, 0xbf, 0x01, 0x12, 0xe7, 0x03, 0x75, 0x95, 0x40, 0xd3, 0x6e, 0x26, 0x96, 0x0b,
-	0xd7, 0x38, 0x2a, 0x10, 0x78, 0xd9, 0x74, 0x6f, 0x02, 0xf7, 0xe3, 0xe5, 0xde, 0xad, 0xf0, 0x39,
-	0xea, 0x42, 0x9d, 0x47, 0x8e, 0x43, 0x38, 0x57, 0xfc, 0x86, 0x9d, 0xc2, 0xac, 0x72, 0x6d, 0x97,
-	0xf2, 0x1e, 0x68, 0xe7, 0x64, 0x4a, 0x72, 0x99, 0xed, 0x68, 0x45, 0x7f, 0x85, 0xb2, 0x25, 0x19,
-	0xe3, 0x3b, 0x7c, 0xbb, 0xa4, 0x5c, 0x24, 0xb1, 0xdc, 0x26, 0x73, 0xe3, 0xb8, 0x68, 0x2a, 0x34,
-	0xf3, 0xd3, 0xf6, 0x94, 0x0f, 0xa0, 0x3e, 0x8c, 0xc4, 0xa4, 0x6c, 0x0f, 0x97, 0x34, 0x8e, 0x7e,
-	0xc0, 0x17, 0xc1, 0x9e, 0x89, 0x9f, 0xd4, 0x16, 0x03, 0x69, 0x5d, 0xe0, 0x29, 0x75, 0x55, 0xd3,
-	0x1a, 0x76, 0x0c, 0x8c, 0x1e, 0x68, 0xb7, 0xf2, 0x80, 0x05, 0xb9, 0x96, 0x61, 0xf2, 0xda, 0xb5,
-	0x7c, 0x39, 0xe4, 0x42, 0x64, 0xa9, 0x9b, 0x06, 0x2f, 0x35, 0xe8, 0x24, 0x59, 0x5f, 0x91, 0x70,
-	0x41, 0x1d, 0x82, 0x46, 0xd0, 0xce, 0xad, 0x39, 0xfa, 0xb5, 0xac, 0xaf, 0xf8, 0x7c, 0xf4, 0x8d,
-	0x2e, 0x6e, 0x54, 0xd0, 0x10, 0x5a, 0x99, 0xf5, 0x45, 0x3f, 0x97, 0xb1, 0xf9, 0x57, 0xa0, 0x6f,
-	0x70, 0x48, 0x89, 0x11, 0xb4, 0x73, 0x3b, 0x98, 0xc9, 0xa5, 0xb8, 0xdb, 0xfa, 0x46, 0x97, 0x14,
-	0xea, 0xc3, 0x67, 0x39, 0x08, 0x94, 0x99, 0x55, 0x3c, 0x4e, 0xbd, 0x68, 0xe1, 0x46, 0xe5, 0x74,
-	0xf0, 0xfa, 0xf6, 0xa7, 0x7a, 0xdf, 0xcf, 0xfc, 0x35, 0x3e, 0x0d, 0xf1, 0x93, 0x47, 0x58, 0xe8,
-	0x51, 0xec, 0x5b, 0x09, 0xc3, 0xe2, 0xa1, 0x63, 0xe1, 0x80, 0x1e, 0xe2, 0x80, 0x8e, 0xbf, 0xaa,
-	0x4f, 0x66, 0xff, 0x3d, 0x00, 0x00, 0xff, 0xff, 0x7b, 0x84, 0xb6, 0xd6, 0xb6, 0x04, 0x00, 0x00,
+	// 440 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0xdd, 0x8e, 0xd2, 0x40,
+	0x14, 0x06, 0x15, 0x81, 0x43, 0x20, 0x64, 0x24, 0x11, 0x27, 0x6a, 0xcc, 0x5c, 0x11, 0x83, 0x6d,
+	0xc4, 0x78, 0xa5, 0x31, 0x41, 0x63, 0x88, 0x77, 0xa6, 0x06, 0x63, 0xbc, 0x31, 0x43, 0x3b, 0x96,
+	0x51, 0xda, 0xe9, 0x76, 0x5a, 0x1e, 0x6b, 0x9f, 0x61, 0xdf, 0x65, 0x5f, 0x64, 0x33, 0xd3, 0x69,
+	0xb7, 0x2d, 0x94, 0x0d, 0x7b, 0x37, 0xdf, 0x9c, 0xf3, 0x7d, 0x73, 0x7e, 0xbe, 0x0c, 0xf4, 0x69,
+	0xc4, 0xad, 0x28, 0x16, 0x89, 0x40, 0x5d, 0xea, 0xba, 0x22, 0x0d, 0x13, 0xfc, 0xc6, 0xe7, 0xc9,
+	0x36, 0xdd, 0x58, 0xae, 0x08, 0x6c, 0x5f, 0xf8, 0xc2, 0xd6, 0xf1, 0x4d, 0xfa, 0x57, 0x23, 0x0d,
+	0xf4, 0x29, 0xe3, 0xe1, 0x41, 0x20, 0x3c, 0xb6, 0xcb, 0x00, 0xf9, 0x04, 0xe3, 0x2f, 0x31, 0xa3,
+	0x09, 0x5b, 0x66, 0x62, 0x0e, 0xbb, 0x40, 0xaf, 0x21, 0x97, 0x9e, 0xb6, 0x5f, 0xb5, 0x67, 0x83,
+	0xc5, 0xd8, 0x32, 0xd8, 0xca, 0xb3, 0xf2, 0x84, 0x23, 0x7c, 0x79, 0x16, 0xdf, 0x86, 0x91, 0xc3,
+	0xa8, 0x57, 0x7a, 0xfd, 0x05, 0x80, 0x09, 0xfe, 0xe1, 0x9e, 0x16, 0xe8, 0x3b, 0x7d, 0x73, 0xf3,
+	0xcd, 0x23, 0x1f, 0x6b, 0x04, 0x79, 0x6e, 0xb9, 0xeb, 0xc8, 0xbb, 0x7f, 0xbb, 0xbf, 0x0e, 0xf8,
+	0x12, 0x4d, 0xa1, 0x2b, 0x53, 0xd7, 0x65, 0x52, 0x6a, 0x7e, 0xcf, 0xc9, 0x61, 0x59, 0xf9, 0xc1,
+	0x5d, 0xca, 0xef, 0xa1, 0xbb, 0x4c, 0x93, 0xed, 0xb9, 0x05, 0x15, 0x34, 0x89, 0x26, 0xd0, 0x49,
+	0xc4, 0x7f, 0x16, 0x9a, 0x99, 0x65, 0x40, 0xdd, 0xee, 0xe9, 0x8e, 0x7b, 0xba, 0x82, 0x9e, 0x93,
+	0x01, 0xf2, 0x16, 0x9e, 0xfc, 0x54, 0x07, 0x9a, 0xb0, 0xb5, 0x64, 0x71, 0x48, 0x03, 0xa6, 0x5e,
+	0xc6, 0xd0, 0x4b, 0x0d, 0x34, 0x2a, 0x05, 0x26, 0xf6, 0x31, 0xca, 0x89, 0xee, 0xc9, 0x0c, 0xc6,
+	0x39, 0xe1, 0x6b, 0x40, 0xf9, 0x4e, 0x3d, 0x30, 0x81, 0x0e, 0x53, 0xe7, 0xbc, 0x46, 0x0d, 0xc8,
+	0xfc, 0x20, 0xf3, 0x84, 0xee, 0xe2, 0xf2, 0x21, 0x8c, 0xcc, 0x1c, 0x7e, 0xb0, 0x78, 0xcf, 0x5d,
+	0x86, 0x56, 0x30, 0xac, 0xb8, 0x10, 0x3d, 0x2b, 0x26, 0x56, 0x77, 0x37, 0x6e, 0x0c, 0x49, 0xd2,
+	0x42, 0x4b, 0x18, 0x94, 0xdc, 0x85, 0x9e, 0x16, 0xb9, 0x55, 0x93, 0xe2, 0x86, 0x80, 0x92, 0x58,
+	0xc1, 0xb0, 0x62, 0x91, 0x52, 0x2d, 0x75, 0xeb, 0xe1, 0xc6, 0x90, 0x12, 0x9a, 0xc3, 0x23, 0xb5,
+	0x5a, 0x54, 0xda, 0x7e, 0x66, 0x10, 0x5c, 0xbf, 0x51, 0xd9, 0xdf, 0x6f, 0x67, 0x98, 0xaf, 0x07,
+	0x3d, 0x2f, 0xf2, 0x8e, 0x2c, 0x1b, 0x9f, 0x8a, 0x9a, 0x46, 0x2a, 0x5b, 0x29, 0x35, 0x52, 0xdf,
+	0x2b, 0x6e, 0x0c, 0x49, 0xd2, 0xfa, 0xbc, 0xb8, 0xba, 0x7e, 0xd9, 0xfe, 0x3d, 0x2f, 0xfd, 0x52,
+	0x21, 0x8f, 0xe9, 0x3f, 0x9f, 0x89, 0xd8, 0xe7, 0x34, 0xb4, 0x0d, 0xd5, 0x96, 0xb1, 0x6b, 0xd3,
+	0x88, 0x7f, 0xa0, 0x11, 0xdf, 0x3c, 0xd6, 0xdf, 0xd3, 0xbb, 0x9b, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0xa3, 0x8a, 0x96, 0xdb, 0xf0, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -654,9 +576,9 @@ type AccountServiceClient interface {
 	CreateAccount(ctx context.Context, in *CreateAccountReq, opts ...grpc.CallOption) (*CreateAccountRes, error)
 	ReadAccount(ctx context.Context, in *ReadAccountReq, opts ...grpc.CallOption) (*ReadAccountRes, error)
 	UpdateAccount(ctx context.Context, in *UpdateAccountReq, opts ...grpc.CallOption) (*UpdateAccountRes, error)
-	// rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRes) {};
-	// rpc ListAccounts (ListAccountsReq) returns (ListAccountsRes) {};
 	Auth(ctx context.Context, in *AuthReq, opts ...grpc.CallOption) (*AuthRes, error)
+	ValidateUsername(ctx context.Context, in *ValidateUsernameReq, opts ...grpc.CallOption) (*ValidateUsernameRes, error)
+	ValidateEmail(ctx context.Context, in *ValidateEmailReq, opts ...grpc.CallOption) (*ValidateEmailRes, error)
 }
 
 type accountServiceClient struct {
@@ -703,14 +625,32 @@ func (c *accountServiceClient) Auth(ctx context.Context, in *AuthReq, opts ...gr
 	return out, nil
 }
 
+func (c *accountServiceClient) ValidateUsername(ctx context.Context, in *ValidateUsernameReq, opts ...grpc.CallOption) (*ValidateUsernameRes, error) {
+	out := new(ValidateUsernameRes)
+	err := c.cc.Invoke(ctx, "/account.AccountService/ValidateUsername", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountServiceClient) ValidateEmail(ctx context.Context, in *ValidateEmailReq, opts ...grpc.CallOption) (*ValidateEmailRes, error) {
+	out := new(ValidateEmailRes)
+	err := c.cc.Invoke(ctx, "/account.AccountService/ValidateEmail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccountServiceServer is the server API for AccountService service.
 type AccountServiceServer interface {
 	CreateAccount(context.Context, *CreateAccountReq) (*CreateAccountRes, error)
 	ReadAccount(context.Context, *ReadAccountReq) (*ReadAccountRes, error)
 	UpdateAccount(context.Context, *UpdateAccountReq) (*UpdateAccountRes, error)
-	// rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRes) {};
-	// rpc ListAccounts (ListAccountsReq) returns (ListAccountsRes) {};
 	Auth(context.Context, *AuthReq) (*AuthRes, error)
+	ValidateUsername(context.Context, *ValidateUsernameReq) (*ValidateUsernameRes, error)
+	ValidateEmail(context.Context, *ValidateEmailReq) (*ValidateEmailRes, error)
 }
 
 func RegisterAccountServiceServer(s *grpc.Server, srv AccountServiceServer) {
@@ -789,6 +729,42 @@ func _AccountService_Auth_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccountService_ValidateUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ValidateUsernameReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).ValidateUsername(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/account.AccountService/ValidateUsername",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).ValidateUsername(ctx, req.(*ValidateUsernameReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AccountService_ValidateEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ValidateEmailReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServiceServer).ValidateEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/account.AccountService/ValidateEmail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServiceServer).ValidateEmail(ctx, req.(*ValidateEmailReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _AccountService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "account.AccountService",
 	HandlerType: (*AccountServiceServer)(nil),
@@ -808,6 +784,14 @@ var _AccountService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Auth",
 			Handler:    _AccountService_Auth_Handler,
+		},
+		{
+			MethodName: "ValidateUsername",
+			Handler:    _AccountService_ValidateUsername_Handler,
+		},
+		{
+			MethodName: "ValidateEmail",
+			Handler:    _AccountService_ValidateEmail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
