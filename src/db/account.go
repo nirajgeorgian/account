@@ -8,36 +8,24 @@ import (
 )
 
 // CreateAccount :- create's an account
-func (db *Database) CreateAccount(ctx context.Context, in *model.Account) error {
+func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*model.Account, error) {
 	tx := db.Begin()
+	defer func() {
+    if r := recover(); r != nil {
+      tx.Rollback()
+    }
+  }()
+	if err := tx.Error; err != nil {
+    return nil, err
+  }
+
 	accountORM, err := in.ToORM(ctx)
 	if err != nil {
-		return errors.New("error converting input to ORM")
+		return nil, errors.New("error converting input to ORM")
 	}
+
 	if err = tx.Create(&accountORM).Error; err != nil {
-		return errors.New("error creating job")
-	}
-
-	_, err = accountORM.ToPB(ctx)
-	if err != nil {
-		tx.Rollback()
-		return errors.New("error converting back to PB")
-	}
-
-	if err = tx.Commit().Error; err != nil {
-		tx.Rollback()
-		return errors.New("error commiting job create coommit")
-	}
-
-	return nil
-}
-
-func (db *Database) ReadAccount(ctx context.Context, accountId string) (*model.Account, error) {
-	tx := db.Begin()
-	var accountORM model.AccountORM
-
-	if err := tx.First(&accountORM, "account_id = ?", accountId).Error; err != nil {
-		return nil, errors.New("error fetching email")
+		return nil, errors.New("error creating job")
 	}
 
 	account, err := accountORM.ToPB(ctx)
@@ -48,43 +36,87 @@ func (db *Database) ReadAccount(ctx context.Context, accountId string) (*model.A
 
 	if err = tx.Commit().Error; err != nil {
 		tx.Rollback()
-		return nil, errors.New("error commiting job create coommit")
+		return nil, errors.New("error commiting job create commit")
 	}
 
 	return &account, nil
 }
 
-func (db *Database) UpdateAccount(ctx context.Context, in *model.Account) error {
+func (db *Database) ReadAccount(ctx context.Context, accountId string) (*model.Account, error) {
 	tx := db.Begin()
+	defer func() {
+    if r := recover(); r != nil {
+      tx.Rollback()
+    }
+  }()
+	if err := tx.Error; err != nil {
+    return nil, err
+  }
 
 	var accountORM model.AccountORM
-	// var originalAccount model.Account
 
-	// accountORM, err = in.ToORM(ctx)
-	// if err != nil {
-	// 	return errors.New("error converting input to ORM")
-	// }
-
-	if err := tx.First(&accountORM, "account_id = ?", in.GetAccountId()).Error; err != nil {
-		return errors.New("failed finding account")
+	if accountId == "" {
+		return nil, errors.New("no account found for this profile")
 	}
 
-	if err := tx.Model(&accountORM).Updates(accountORM).Error; err != nil {
-		return errors.New("error updating account")
+	if err := tx.First(&accountORM, "account_id = ?", accountId).Error; err != nil {
+		return nil, errors.New("error fetching account")
 	}
 
-	_, err := accountORM.ToPB(ctx)
+	account, err := accountORM.ToPB(ctx)
 	if err != nil {
 		tx.Rollback()
-		return errors.New("error converting back to PB")
+		return nil, errors.New("error converting back to PB")
 	}
 
 	if err = tx.Commit().Error; err != nil {
 		tx.Rollback()
-		return errors.New("error commiting job create coommit")
+		return nil, errors.New("error fetching account details commit")
 	}
 
-	return nil
+	return &account, nil
+}
+
+func (db *Database) UpdateAccount(ctx context.Context, in *model.Account) (*model.Account, error) {
+	tx := db.Begin()
+	defer func() {
+    if r := recover(); r != nil {
+      tx.Rollback()
+    }
+  }()
+	if err := tx.Error; err != nil {
+    return nil, err
+  }
+
+	accountORM, err := in.ToORM(ctx)
+	if err != nil {
+		return nil, errors.New("error converting input to ORM")
+	}
+
+	if accountORM.AccountId == "" {
+		return nil, errors.New("please pass account ID")
+	}
+
+	if err := tx.First(&accountORM, "account_id = ?", accountORM.AccountId).Error; err != nil {
+		return nil, errors.New("error fetching account")
+	}
+
+	if err := tx.Model(&accountORM).Updates(model.Account{Description: in.Description, Username: in.Username, Email: in.Email}).Error; err != nil {
+		return nil, errors.New("error updating account")
+	}
+
+	account, err := accountORM.ToPB(ctx)
+	if err != nil {
+		tx.Rollback()
+		return nil, errors.New("error converting back to PB")
+	}
+
+	if err = tx.Commit().Error; err != nil {
+		tx.Rollback()
+		return nil, errors.New("error commiting job update commit")
+	}
+
+	return &account, nil
 }
 
 // // ReadAccount :- read account profile

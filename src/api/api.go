@@ -48,11 +48,10 @@ func New(a *app.App) (api *API, err error) {
 func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq) (*CreateAccountRes, error) {
 	fmt.Println("creating account")
 
-	err := s.db.CreateAccount(ctx, in.Account)
+	account, err := s.db.CreateAccount(ctx, in.Account)
 	if err != nil {
 		return nil, err
 	}
-	account := in.Account
 
 	return &CreateAccountRes{Account: account}, nil
 }
@@ -60,12 +59,12 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 func (s *AccountServer) UpdateAccount(ctx context.Context, in *UpdateAccountReq) (*UpdateAccountRes, error) {
 	fmt.Println("updating profile")
 
-	err := s.db.UpdateAccount(ctx, in.Account)
+	account, err := s.db.UpdateAccount(ctx, in.Account)
 	if err != nil {
 		return nil, err
 	}
 
-	return &UpdateAccountRes{Success: true}, nil
+	return &UpdateAccountRes{Success: true, Account: account}, nil
 }
 
 func (s *AccountServer) ReadAccount(ctx context.Context, in *ReadAccountReq) (*ReadAccountRes, error) {
