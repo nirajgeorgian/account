@@ -57,6 +57,28 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 	return &CreateAccountRes{Account: account}, nil
 }
 
+func (s *AccountServer) UpdateAccount(ctx context.Context, in *UpdateAccountReq) (*UpdateAccountRes, error) {
+	fmt.Println("updating profile")
+
+	err := s.db.UpdateAccount(ctx, in.Account)
+	if err != nil {
+		return nil, err
+	}
+
+	return &UpdateAccountRes{Success: true}, nil
+}
+
+func (s *AccountServer) ReadAccount(ctx context.Context, in *ReadAccountReq) (*ReadAccountRes, error) {
+	fmt.Println("reading profile")
+
+	account, err := s.db.ReadAccount(ctx, in.AccountId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ReadAccountRes{Account: account}, nil
+}
+
 func ListenGRPC(api *API, port int) error {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {

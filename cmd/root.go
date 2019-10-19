@@ -17,6 +17,9 @@ var Verbose bool
 // UseViper :- use viper for configuration
 var UseViper bool
 
+// accountServiceURI :- account service microservice URI
+var accountServiceURI string
+
 func init() {
 	cobra.OnInitialize(initConfig)
 

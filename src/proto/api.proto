@@ -41,7 +41,7 @@ message DeleteAccountRes {
 
 service AccountService {
   rpc CreateAccount (CreateAccountReq) returns (CreateAccountRes) {};
-  // rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
-  // rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
+  rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
+  rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
   // rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRes) {};
 }
