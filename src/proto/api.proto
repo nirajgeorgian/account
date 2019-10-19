@@ -29,6 +29,7 @@ message UpdateAccountReq {
 }
 message UpdateAccountRes {
   bool success = 1;
+  Account account = 2;
 }
 
 // delete an account

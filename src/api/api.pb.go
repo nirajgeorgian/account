@@ -223,10 +223,11 @@ func (m *UpdateAccountReq) GetAccount() *model.Account {
 }
 
 type UpdateAccountRes struct {
-	Success              bool     `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Success              bool           `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Account              *model.Account `protobuf:"bytes,2,opt,name=account,proto3" json:"account,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *UpdateAccountRes) Reset()         { *m = UpdateAccountRes{} }
@@ -259,6 +260,13 @@ func (m *UpdateAccountRes) GetSuccess() bool {
 		return m.Success
 	}
 	return false
+}
+
+func (m *UpdateAccountRes) GetAccount() *model.Account {
+	if m != nil {
+		return m.Account
+	}
+	return nil
 }
 
 // delete an account

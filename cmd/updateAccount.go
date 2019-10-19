@@ -9,17 +9,18 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	api "github.com/nirajgeorgian/account/src/api"
+	model "github.com/nirajgeorgian/account/src/model"
 )
 
 func init() {
-  listAccount.Flags().StringVarP(&accountServiceURI, "accountserviceuri", "u", "", "account service uri (required)")
-  listAccount.MarkFlagRequired("accountserviceuri")
+  updateAccount.Flags().StringVarP(&accountServiceURI, "accountserviceuri", "u", "", "account service uri (required)")
+  updateAccount.MarkFlagRequired("accountserviceuri")
   viper.BindPFlag("accountserviceuri", createAccount.Flags().Lookup("accountserviceuri"))
 }
 
-var listAccount = &cobra.Command{
-  Use: "listAccount",
-  Short: "listAccount an account with gRPC server on:3000",
+var updateAccount = &cobra.Command{
+  Use: "updateAccount",
+  Short: "update an account with gRPC server on:3000",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		address     := viper.GetString("accountserviceuri")
 
@@ -31,19 +32,25 @@ var listAccount = &cobra.Command{
 		defer conn.Close()
 		c := api.NewAccountServiceClient(conn)
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
 		defer cancel()
 
-		r, err := c.ReadAccount(ctx, &api.ReadAccountReq{AccountId: "41808453-a12c-4376-921f-1e5888190729"})
+		account := model.Account{
+			AccountId: "1",
+			Username: "updateusername",
+			Email: "test",
+			Description: "update 1 desc",
+		}
+		r, err := c.UpdateAccount(ctx, &api.UpdateAccountReq{Account: &account})
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
-		log.Printf("Greeting: %s", r.Account)
+		log.Printf("Greeting: %t %s", r.Success, r.Account)
 
 		return nil
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(listAccount)
+	RootCmd.AddCommand(updateAccount)
 }
