@@ -4,8 +4,15 @@ import (
 	"context"
 
 	"google.golang.org/grpc"
+
 	"github.com/nirajgeorgian/account/src/model"
 )
+
+// Client :- account client structure
+type Client struct {
+	conn    *grpc.ClientConn
+	service AccountServiceClient
+}
 
 func NewClient(url string) (*Client, error) {
 	conn, err := grpc.Dial(url, grpc.WithInsecure())
@@ -25,6 +32,61 @@ func (c *Client) CreateAccount(ctx context.Context, account model.Account) (*mod
 		return nil, err
 	}
 	return r.Account, nil
+}
+
+func (c *Client) UpdateAccount(ctx context.Context, account model.Account) (*UpdateAccountRes, error) {
+	r, err := c.service.UpdateAccount(
+		ctx,
+		&UpdateAccountReq{Account: &account},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
+func (c *Client) ReadAccount(ctx context.Context, account_id string) (*ReadAccountRes, error) {
+	r, err := c.service.ReadAccount(
+		ctx,
+		&ReadAccountReq{AccountId: account_id},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
+func (c *Client) ValidateUsername(ctx context.Context, username string) (*ValidateUsernameRes, error) {
+	r, err := c.service.ValidateUsername(
+		ctx,
+		&ValidateUsernameReq{Username: username},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
+func (c *Client) ValidateEmail(ctx context.Context, email string) (*ValidateEmailRes, error) {
+	r, err := c.service.ValidateEmail(
+		ctx,
+		&ValidateEmailReq{Email: email},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
+func (c *Client) Auth(ctx context.Context, account model.Account) (*AuthRes, error) {
+	r, err := c.service.Auth(
+		ctx,
+		&AuthReq{Account: &account},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
 }
 
 func (c *Client) Close() {

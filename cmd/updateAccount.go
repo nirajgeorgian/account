@@ -36,7 +36,7 @@ var updateAccount = &cobra.Command{
 		defer cancel()
 
 		account := model.Account{
-			AccountId: "1",
+			AccountId: "8f48be25-7b21-471c-a8dc-562adec0835e",
 			Username: "updateusername",
 			Email: "test",
 			Description: "update 1 desc",

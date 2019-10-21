@@ -57,7 +57,7 @@ var serveCmd = &cobra.Command{
 
 		if err := proto.ListenGRPC(api, port); err != nil {
 	    log.Fatalf("Failed to serve: %v\n", err)
-	   }
+	  }
 
 		return nil
 	},

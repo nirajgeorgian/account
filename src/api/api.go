@@ -156,3 +156,20 @@ func ListenGRPC(api *API, port int) error {
 
 	return grpcServer.Serve(lis)
 }
+
+func (s *AccountServer) Auth(ctx context.Context, in *AuthReq) (*AuthRes, error) {
+	log.Println("server: Auth")
+
+	account, err := s.db.Auth(ctx, in.Account)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := s.Encode(account)
+	if err != nil {
+		return nil, err
+	}
+
+	// create token
+	return &AuthRes{Token: token, Valid: true}, nil
+}

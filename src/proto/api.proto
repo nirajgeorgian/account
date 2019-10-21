@@ -32,6 +32,7 @@ message UpdateAccountRes {
   Account account = 2;
 }
 
+// auth for account
 message AuthReq {
   Account account = 1;
 }
@@ -58,7 +59,7 @@ service AccountService {
   rpc CreateAccount (CreateAccountReq) returns (CreateAccountRes) {};
   rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
   rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
-  // rpc Auth(AuthReq) returns (AuthRes) {};
+  rpc Auth(AuthReq) returns (AuthRes) {};
   rpc ValidateUsername(ValidateUsernameReq) returns (ValidateUsernameRes) {};
   rpc ValidateEmail(ValidateEmailReq) returns (ValidateEmailRes) {};
 }
