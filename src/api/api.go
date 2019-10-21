@@ -1,6 +1,6 @@
 // Copyright 2019 nirajgeorgian. All rights reserved.
 // source: src/api/api.go
-
+// package: api
 
 package api
 
@@ -155,21 +155,4 @@ func ListenGRPC(api *API, port int) error {
 	log.Printf("starting HTTP/2 gRPC API server: %q\n", lis.Addr().String())
 
 	return grpcServer.Serve(lis)
-}
-
-func (s *AccountServer) Auth(ctx context.Context, in *AuthReq) (*AuthRes, error) {
-	log.Println("server: Auth")
-
-	account, err := s.db.Auth(ctx, in.Account)
-	if err != nil {
-		return nil, err
-	}
-
-	token, err := s.Encode(account)
-	if err != nil {
-		return nil, err
-	}
-
-	// create token
-	return &AuthRes{Token: token, Valid: true}, nil
 }

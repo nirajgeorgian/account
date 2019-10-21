@@ -41,6 +41,7 @@ message AuthRes {
   bool valid = 2;
 }
 
+// validate username
 message ValidateUsernameReq {
   string username = 1;
 }
@@ -48,6 +49,7 @@ message ValidateUsernameRes {
   bool success = 1;
 }
 
+// validate email
 message ValidateEmailReq {
   string email = 1;
 }
