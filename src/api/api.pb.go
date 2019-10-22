@@ -356,6 +356,7 @@ func (m *AuthRes) GetValid() bool {
 	return false
 }
 
+// validate username
 type ValidateUsernameReq struct {
 	Username             string   `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -434,6 +435,7 @@ func (m *ValidateUsernameRes) GetSuccess() bool {
 	return false
 }
 
+// validate email
 type ValidateEmailReq struct {
 	Email                string   `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
