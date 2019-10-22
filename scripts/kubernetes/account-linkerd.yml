@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: account
+  name: account
+  namespace: dododuck
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      creationTimestamp: null
+      labels:
+        app: account-svc
+    spec:
+      containers:
+      - env:
+        - name: DATABASEURI
+          value: host=salt.db.elephantsql.com user=pvhdolsp dbname=pvhdolsp password=WPSXt41F15pPgpTx-0V7CC6Ec5ALoyvL
+            sslmode=disable
+        - name: PORT
+          value: "3001"
+        image: nirajgeorgian/account:latest
+        imagePullPolicy: Always
+        name: account-svc
+        ports:
+        - containerPort: 3001
+          name: grpc
+        resources:
+          requests:
+            cpu: 100m
+      serviceAccountName: account
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-svc
+  namespace: dododuck
+spec:
+  selector:
+    app: account-svc
+  clusterIP: None
+  ports:
+    - port: 3001
+      targetPort: 3001
+      name: grpc
+---
