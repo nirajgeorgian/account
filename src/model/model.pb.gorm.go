@@ -13,15 +13,18 @@ It has these top-level messages:
 package model
 
 import context "context"
+import time "time"
 
 import errors1 "github.com/infobloxopen/protoc-gen-gorm/errors"
 import field_mask1 "google.golang.org/genproto/protobuf/field_mask"
 import gorm1 "github.com/jinzhu/gorm"
 import gorm2 "github.com/infobloxopen/atlas-app-toolkit/gorm"
+import ptypes1 "github.com/golang/protobuf/ptypes"
 
 import golang_proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
+import _ "github.com/golang/protobuf/ptypes/timestamp"
 import _ "github.com/gogo/protobuf/gogoproto"
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -31,10 +34,12 @@ var _ = math.Inf
 
 type AccountORM struct {
 	AccountId    string `gorm:"primary_key"`
+	CreatedAt    *time.Time
 	Description  string `gorm:"type:varchar(512)"`
 	Email        string `gorm:"type:varchar(120)"`
-	PasswordHash string
+	PasswordHash string `gorm:"type:varchar(120)"`
 	PasswordSalt string
+	UpdatedAt    *time.Time
 	Username     string `gorm:"type:varchar(120)"`
 	Verified     bool   `gorm:"type:boolean"`
 }
@@ -61,6 +66,20 @@ func (m *Account) ToORM(ctx context.Context) (AccountORM, error) {
 	to.PasswordSalt = m.PasswordSalt
 	to.Description = m.Description
 	to.Verified = m.Verified
+	if m.CreatedAt != nil {
+		var t time.Time
+		if t, err = ptypes1.Timestamp(m.CreatedAt); err != nil {
+			return to, err
+		}
+		to.CreatedAt = &t
+	}
+	if m.UpdatedAt != nil {
+		var t time.Time
+		if t, err = ptypes1.Timestamp(m.UpdatedAt); err != nil {
+			return to, err
+		}
+		to.UpdatedAt = &t
+	}
 	if posthook, ok := interface{}(m).(AccountWithAfterToORM); ok {
 		err = posthook.AfterToORM(ctx, &to)
 	}
@@ -84,6 +103,16 @@ func (m *AccountORM) ToPB(ctx context.Context) (Account, error) {
 	to.PasswordSalt = m.PasswordSalt
 	to.Description = m.Description
 	to.Verified = m.Verified
+	if m.CreatedAt != nil {
+		if to.CreatedAt, err = ptypes1.TimestampProto(*m.CreatedAt); err != nil {
+			return to, err
+		}
+	}
+	if m.UpdatedAt != nil {
+		if to.UpdatedAt, err = ptypes1.TimestampProto(*m.UpdatedAt); err != nil {
+			return to, err
+		}
+	}
 	if posthook, ok := interface{}(m).(AccountWithAfterToPB); ok {
 		err = posthook.AfterToPB(ctx, &to)
 	}
@@ -181,6 +210,14 @@ func DefaultApplyFieldMaskAccount(ctx context.Context, patchee *Account, patcher
 		}
 		if f == prefix+"Verified" {
 			patchee.Verified = patcher.Verified
+			continue
+		}
+		if f == prefix+"CreatedAt" {
+			patchee.CreatedAt = patcher.CreatedAt
+			continue
+		}
+		if f == prefix+"UpdatedAt" {
+			patchee.UpdatedAt = patcher.UpdatedAt
 			continue
 		}
 	}

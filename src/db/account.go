@@ -1,11 +1,26 @@
 package db
 
 import (
+	"fmt"
+	log "github.com/Sirupsen/logrus"
+
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
+	"golang.org/x/crypto/bcrypt"
+	"github.com/satori/go.uuid"
 
 	"github.com/nirajgeorgian/account/src/model"
 )
+
+func HashPassword(password string) (string, error) {
+  bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+  return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+  err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+  return err == nil
+}
 
 func (db *Database) ValidateUsername(ctx context.Context, username string) (bool, error) {
 	var accountORM []*model.AccountORM
@@ -50,6 +65,16 @@ func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*mode
 		return nil, errors.New("error converting input to ORM")
 	}
 
+	u1 := uuid.NewV4()
+	accountORM.AccountId = u1.String()
+
+	// hash password
+	hashedPass, err := HashPassword(accountORM.PasswordHash)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("error hashing password: %v", err))
+	}
+	accountORM.PasswordHash = hashedPass
+
 	if err = tx.Create(&accountORM).Error; err != nil {
 		return nil, errors.New("error creating job")
 	}
@@ -62,7 +87,31 @@ func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*mode
 
 	if err = tx.Commit().Error; err != nil {
 		tx.Rollback()
-		return nil, errors.New("error commiting job create commit")
+		return nil, errors.New("error commiting job create coommit")
+	}
+
+	return &account, nil
+}
+
+func (db *Database) Auth(ctx context.Context, in *model.Account) (*model.Account, error) {
+	log.Println("database: Auth")
+	accountORM, err := in.ToORM(ctx)
+	if err != nil {
+		return nil, errors.New("error converting input to ORM")
+	}
+
+	db.Where("email = ?", accountORM.Email).First(&accountORM)
+
+	account, err := accountORM.ToPB(ctx)
+	if err != nil {
+		return nil, errors.New("error converting back to PB")
+	}
+	if account.GetAccountId() == "" {
+		return nil, errors.New("no account found for this profile")
+	}
+
+	if matched := CheckPasswordHash(in.PasswordHash, account.PasswordHash); !matched {
+		return nil, errors.New("password do not matched")
 	}
 
 	return &account, nil

@@ -1,3 +1,7 @@
+// Copyright 2019 nirajgeorgian. All rights reserved.
+// source: src/app/config.go
+// package: app
+
 package app
 
 import (

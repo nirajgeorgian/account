@@ -32,11 +32,11 @@ var createAccount = &cobra.Command{
 		defer conn.Close()
 		c := api.NewAccountServiceClient(conn)
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
 		account := model.Account{
-			AccountId: "2",
+			AccountId: "1",
 			Username: "dododuck",
 			Email: "dododuck@example.com",
 			PasswordHash: "test123",
@@ -47,7 +47,7 @@ var createAccount = &cobra.Command{
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
-		log.Printf("Greeting: %s", r.Account.AccountId)
+		log.Printf("Greeting: %s", r.Account)
 
 		return nil
 	},

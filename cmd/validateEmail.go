@@ -31,7 +31,7 @@ var validateEmail = &cobra.Command{
 		defer conn.Close()
 		c := api.NewAccountServiceClient(conn)
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
 		defer cancel()
 
 		r, err := c.ValidateEmail(ctx, &api.ValidateEmailReq{Email: "dododuck@example.com"})

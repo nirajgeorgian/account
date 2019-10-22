@@ -9,17 +9,18 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	api "github.com/nirajgeorgian/account/src/api"
+	model "github.com/nirajgeorgian/account/src/model"
 )
 
 func init() {
-  readAccount.Flags().StringVarP(&accountServiceURI, "accountserviceuri", "u", "", "account service uri (required)")
-  readAccount.MarkFlagRequired("accountserviceuri")
+  createAuth.Flags().StringVarP(&AccountServiceURI, "accountserviceuri", "u", "localhost:3001", "account service uri (required)")
+  createAuth.MarkFlagRequired("accountserviceuri")
   viper.BindPFlag("accountserviceuri", createAccount.Flags().Lookup("accountserviceuri"))
 }
 
-var readAccount = &cobra.Command{
-  Use: "readAccount",
-  Short: "readAccount an account with gRPC server on:3000",
+var createAuth = &cobra.Command{
+  Use: "auth",
+  Short: "authenticate an account with gRPC server on:3001",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		address     := viper.GetString("accountserviceuri")
 
@@ -34,16 +35,23 @@ var readAccount = &cobra.Command{
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
-		r, err := c.ReadAccount(ctx, &api.ReadAccountReq{AccountId: "8f48be25-7b21-471c-a8dc-562adec0835e"})
+		account := model.Account{
+			Username: "dododuck",
+			Email: "dododuck@example.com",
+			PasswordHash: "test123",
+			PasswordSalt: "test123",
+			Description: "dodo duck lives here",
+		}
+		r, err := c.Auth(ctx, &api.AuthReq{Account: &account})
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
-		log.Printf("Greeting: %s", r.Account)
+		log.Printf("Greeting: %s", r.Token)
 
 		return nil
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(readAccount)
+	RootCmd.AddCommand(createAuth)
 }

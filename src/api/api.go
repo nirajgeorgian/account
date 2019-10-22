@@ -1,6 +1,6 @@
 // Copyright 2019 nirajgeorgian. All rights reserved.
 // source: src/api/api.go
-
+// package: api
 
 package api
 

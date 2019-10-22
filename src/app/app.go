@@ -1,3 +1,7 @@
+// Copyright 2019 nirajgeorgian. All rights reserved.
+// source: src/app/app.go
+// package: app
+
 package app
 
 import (
@@ -8,13 +12,13 @@ import (
 	"github.com/nirajgeorgian/account/src/db"
 )
 
-// App :- default app structure
+// App is the default app structure
 type App struct {
 	Config   *Config
 	Database *db.Database
 }
 
-// New :- returns new app package instance
+// New returns new app package instance
 func New() (app *App, err error) {
 	app = &App{}
 	app.Config, err = InitConfig()
@@ -40,7 +44,7 @@ func New() (app *App, err error) {
 	return app, err
 }
 
-// Close :- close any database connection
+// Close helps us to close any database connection
 func (a *App) Close() error {
 	return a.Database.Close()
 }

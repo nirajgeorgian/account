@@ -1,7 +1,7 @@
 package db
 
 import (
-	"fmt"
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
@@ -25,7 +25,7 @@ func New(config *Config) (*Database, error) {
 	if err = db.DB().Ping(); err != nil {
 		return nil, errors.Wrap(err, "database ping error")
 	}
-	fmt.Println("Connected to database")
+	log.Println("Connected to database")
 
 	return &Database{db}, nil
 }
