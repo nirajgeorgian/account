@@ -11,8 +11,17 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
+	"go.opencensus.io/trace"
+	"go.opencensus.io/stats/view"
+	"go.opencensus.io/plugin/ocgrpc"
+	"go.opencensus.io/exporter/zipkin"
+
+	openzipkin "github.com/openzipkin/zipkin-go"
+	zipkinHTTP "github.com/openzipkin/zipkin-go/reporter/http"
+
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"github.com/spf13/viper"
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"google.golang.org/grpc/reflection"
@@ -51,17 +60,25 @@ func New(a *app.App) (api *API, err error) {
 func (s *AccountServer) Auth(ctx context.Context, in *AuthReq) (*AuthRes, error) {
 	log.Println("server: Auth")
 
+	ctx, span := trace.StartSpan(ctx, "account.grpc.Auth")
+	defer span.End()
+
 	account, err := s.db.Auth(ctx, in.Account)
 	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
 		return nil, err
 	}
 
 	token, err := s.Encode(account)
 	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
 		return nil, err
 	}
 
-	// create token
+	span.Annotate([]trace.Attribute{
+		trace.StringAttribute("fetch", "Auth"),
+	}, "Auth server")
+
 	return &AuthRes{Token: token, Valid: true}, nil
 }
 
@@ -69,10 +86,18 @@ func (s *AccountServer) Auth(ctx context.Context, in *AuthReq) (*AuthRes, error)
 func (s *AccountServer) ValidateUsername(ctx context.Context, in *ValidateUsernameReq) (*ValidateUsernameRes, error) {
 	fmt.Println("validating username")
 
+	ctx, span := trace.StartSpan(ctx, "account.grpc.ValidateUsername")
+	defer span.End()
+
 	success, err := s.db.ValidateUsername(ctx, in.Username)
 	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
 		return nil, err
 	}
+
+	span.Annotate([]trace.Attribute{
+		trace.StringAttribute("fetch", "ValidateUsername"),
+	}, "ValidateUsername server")
 
 	return &ValidateUsernameRes{Success: success}, nil
 }
@@ -81,10 +106,18 @@ func (s *AccountServer) ValidateUsername(ctx context.Context, in *ValidateUserna
 func (s *AccountServer) ValidateEmail(ctx context.Context, in *ValidateEmailReq) (*ValidateEmailRes, error) {
 	fmt.Println("validating email")
 
+	ctx, span := trace.StartSpan(ctx, "account.grpc.ValidateEmail")
+	defer span.End()
+
 	success, err := s.db.ValidateEmail(ctx, in.Email)
 	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
 		return nil, err
 	}
+
+	span.Annotate([]trace.Attribute{
+		trace.StringAttribute("fetch", "ValidateEmail"),
+	}, "ValidateEmail server")
 
 	return &ValidateEmailRes{Success: success}, nil
 }
@@ -93,10 +126,18 @@ func (s *AccountServer) ValidateEmail(ctx context.Context, in *ValidateEmailReq)
 func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq) (*CreateAccountRes, error) {
 	log.Println("server: CreateAccount")
 
+	ctx, span := trace.StartSpan(ctx, "account.grpc.CreateAccount")
+	defer span.End()
+
 	account, err := s.db.CreateAccount(ctx, in.Account)
 	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
 		return nil, err
 	}
+
+	span.Annotate([]trace.Attribute{
+		trace.StringAttribute("fetch", "CreateAccount"),
+	}, "CreateAccount server")
 
 	return &CreateAccountRes{Account: account}, nil
 }
@@ -105,10 +146,18 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 func (s *AccountServer) UpdateAccount(ctx context.Context, in *UpdateAccountReq) (*UpdateAccountRes, error) {
 	fmt.Println("updating profile")
 
+	ctx, span := trace.StartSpan(ctx, "account.grpc.UpdateAccount")
+	defer span.End()
+
 	account, err := s.db.UpdateAccount(ctx, in.Account)
 	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
 		return nil, err
 	}
+
+	span.Annotate([]trace.Attribute{
+		trace.StringAttribute("fetch", "UpdateAccount"),
+	}, "UpdateAccount server")
 
 	return &UpdateAccountRes{Success: true, Account: account}, nil
 }
@@ -117,16 +166,49 @@ func (s *AccountServer) UpdateAccount(ctx context.Context, in *UpdateAccountReq)
 func (s *AccountServer) ReadAccount(ctx context.Context, in *ReadAccountReq) (*ReadAccountRes, error) {
 	fmt.Println("reading single profile")
 
+	ctx, span := trace.StartSpan(ctx, "account.grpc.ReadAccount")
+	defer span.End()
+
+	span.Annotate([]trace.Attribute{
+		trace.StringAttribute("fetch", "ReadAccount"),
+	}, "fetch account from server")
+
 	account, err := s.db.ReadAccount(ctx, in.AccountId)
 	if err != nil {
+		span.SetStatus(trace.Status{
+			Code:    trace.StatusCodeUnknown,
+			Message: err.Error(),
+		})
 		return nil, err
 	}
+
+	span.Annotate([]trace.Attribute{
+		trace.StringAttribute("fetch", "ReadAccount"),
+	}, "ReadAccount server")
 
 	return &ReadAccountRes{Account: account}, nil
 }
 
 // ListenGRPC serves the account API on GRPC server
 func ListenGRPC(api *API, port int) error {
+	if err := view.Register(ocgrpc.DefaultServerViews...); err != nil {
+		log.Fatalf("Failed to register ocgrpc server views: %v", err)
+	}
+
+	localURL := viper.GetString("localendpoint")
+	zipkinURL := viper.GetString("zipkinendpoint")
+
+	localEndpoint, err := openzipkin.NewEndpoint("account-svc", localURL)
+	if err != nil {
+		log.Fatalf("Failed to create the local zipkinEndpoint: %v", err)
+	}
+
+	reporter := zipkinHTTP.NewReporter(zipkinURL + "/api/v2/spans")
+	ze := zipkin.NewExporter(reporter, localEndpoint)
+	trace.RegisterExporter(ze)
+
+	trace.ApplyConfig(trace.Config{DefaultSampler: trace.AlwaysSample()})
+
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		return err
@@ -139,9 +221,11 @@ func ListenGRPC(api *API, port int) error {
 	recoveryOpts := []grpc_recovery.Option{
 		grpc_recovery.WithRecoveryHandler(recoveryFunc),
 	}
+
 	grpcServer := grpc.NewServer(
 		grpc.ConnectionTimeout(time.Minute*30),
 		grpc.MaxRecvMsgSize(1024*1024*128),
+		grpc.StatsHandler(&ocgrpc.ServerHandler{}),
 		grpc_middleware.WithUnaryServerChain(
 			grpc_recovery.UnaryServerInterceptor(recoveryOpts...),
 		),

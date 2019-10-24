@@ -5,12 +5,12 @@ metadata:
   name: account
   namespace: dododuck
   labels:
-    app: account
+    app: account-svc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: account
+      app: account-svc
   strategy: {}
   template:
     metadata:

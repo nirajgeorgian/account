@@ -21,19 +21,26 @@ var DatabaseURI string
 
 var proxyCount string
 
+// LocalENdpoint :- local endpoint
+var LocalEndpoint string
+
+// ZipkinEndpoint string
+var ZipkinEndpoint string
+
 func init() {
 	serveCmd.Flags().IntVarP(&Port, "port", "p", 3000, "port configuration for this application")
 	serveCmd.Flags().StringVarP(&SecretKey, "secretkey", "k", "dododuckN9", "secret key for application (required)")
 	serveCmd.Flags().StringVarP(&DatabaseURI, "databaseuri", "d", "", "database URI for postgresql (required)")
 	serveCmd.Flags().StringVarP(&proxyCount, "proxycount", "x", "", "no. of proxy count")
-
-	// serveCmd.MarkFlagRequired("secretkey")
-	// serveCmd.MarkFlagRequired("databaseuri")
+	serveCmd.Flags().StringVarP(&LocalEndpoint, "localendpoint", "u", "", "local endopoint URL")
+	serveCmd.Flags().StringVarP(&ZipkinEndpoint, "zipkinendpoint", "z", "", "zipkin endopoint URL")
 
 	viper.BindPFlag("port", serveCmd.Flags().Lookup("port"))
 	viper.BindPFlag("secretkey", serveCmd.Flags().Lookup("secretkey"))
 	viper.BindPFlag("databaseuri", serveCmd.Flags().Lookup("databaseuri"))
 	viper.BindPFlag("proxycount", serveCmd.Flags().Lookup("proxycount"))
+	viper.BindPFlag("localendpoint", serveCmd.Flags().Lookup("localendpoint"))
+	viper.BindPFlag("zipkinendpoint", serveCmd.Flags().Lookup("zipkinendpoint"))
 }
 
 var serveCmd = &cobra.Command{
