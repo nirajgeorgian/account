@@ -2,7 +2,6 @@ package db
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 
 	"go.opencensus.io/trace"
 	"github.com/pkg/errors"
@@ -24,7 +23,7 @@ func CheckPasswordHash(password, hash string) bool {
 }
 
 func (db *Database) ValidateUsername(ctx context.Context, username string) (bool, error) {
-	ctx, span := trace.StartSpan(ctx, "account.grpc.account.Auth")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.db.Auth")
 	defer span.End()
 
 	var accountORM []*model.AccountORM
@@ -39,13 +38,13 @@ func (db *Database) ValidateUsername(ctx context.Context, username string) (bool
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("query", "ValidateUsername"),
-	}, "ValidateUsername server")
+	}, "account src/db")
 
 	return false, nil
 }
 
 func (db *Database) ValidateEmail(ctx context.Context, email string) (bool, error) {
-	ctx, span := trace.StartSpan(ctx, "account.grpc.account.ValidateEmail")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.db.ValidateEmail")
 	defer span.End()
 
 	var accountORM []*model.AccountORM
@@ -60,14 +59,14 @@ func (db *Database) ValidateEmail(ctx context.Context, email string) (bool, erro
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("query", "ValidateEmail"),
-	}, "ValidateEmail server")
+	}, "account src/db")
 
 	return false, nil
 }
 
 // CreateAccount :- create's an account
 func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*model.Account, error) {
-	ctx, span := trace.StartSpan(ctx, "account.grpc.account.CreateAccount")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.db.CreateAccount")
 	defer span.End()
 
 	tx := db.Begin()
@@ -118,16 +117,15 @@ func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*mode
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("query", "CreateAccount"),
-	}, "CreateAccount server")
+	}, "account src/db")
 
 	return &account, nil
 }
 
 func (db *Database) Auth(ctx context.Context, in *model.Account) (*model.Account, error) {
-	ctx, span := trace.StartSpan(ctx, "account.grpc.account.Auth")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.db.Auth")
 	defer span.End()
 
-	log.Println("database: Auth")
 	accountORM, err := in.ToORM(ctx)
 	if err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
@@ -153,13 +151,13 @@ func (db *Database) Auth(ctx context.Context, in *model.Account) (*model.Account
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("query", "Auth"),
-	}, "Auth server")
+	}, "account src/db")
 
 	return &account, nil
 }
 
 func (db *Database) ReadAccount(ctx context.Context, accountId string) (*model.Account, error) {
-	ctx, span := trace.StartSpan(ctx, "account.grpc.account.ReadAccount")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.db.ReadAccount")
 	defer span.End()
 
 	tx := db.Begin()
@@ -200,13 +198,13 @@ func (db *Database) ReadAccount(ctx context.Context, accountId string) (*model.A
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("query", "ReadAccount"),
-	}, "ReadAccount server")
+	}, "account src/db")
 
 	return &account, nil
 }
 
 func (db *Database) UpdateAccount(ctx context.Context, in *model.Account) (*model.Account, error) {
-	ctx, span := trace.StartSpan(ctx, "account.grpc.server.UpdateAccount")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.db.UpdateAccount")
 	defer span.End()
 
 	tx := db.Begin()
@@ -256,7 +254,7 @@ func (db *Database) UpdateAccount(ctx context.Context, in *model.Account) (*mode
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("query", "UpdateAccount"),
-	}, "UpdateAccount server")
+	}, "account src/db")
 
 	return &account, nil
 }
