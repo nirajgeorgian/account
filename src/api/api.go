@@ -60,7 +60,7 @@ func New(a *app.App) (api *API, err error) {
 func (s *AccountServer) Auth(ctx context.Context, in *AuthReq) (*AuthRes, error) {
 	log.Println("server: Auth")
 
-	ctx, span := trace.StartSpan(ctx, "account.grpc.Auth")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.api.Auth")
 	defer span.End()
 
 	account, err := s.db.Auth(ctx, in.Account)
@@ -77,7 +77,7 @@ func (s *AccountServer) Auth(ctx context.Context, in *AuthReq) (*AuthRes, error)
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("fetch", "Auth"),
-	}, "Auth server")
+	}, "account /src/api")
 
 	return &AuthRes{Token: token, Valid: true}, nil
 }
@@ -86,7 +86,7 @@ func (s *AccountServer) Auth(ctx context.Context, in *AuthReq) (*AuthRes, error)
 func (s *AccountServer) ValidateUsername(ctx context.Context, in *ValidateUsernameReq) (*ValidateUsernameRes, error) {
 	fmt.Println("validating username")
 
-	ctx, span := trace.StartSpan(ctx, "account.grpc.ValidateUsername")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.api.ValidateUsername")
 	defer span.End()
 
 	success, err := s.db.ValidateUsername(ctx, in.Username)
@@ -97,7 +97,7 @@ func (s *AccountServer) ValidateUsername(ctx context.Context, in *ValidateUserna
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("fetch", "ValidateUsername"),
-	}, "ValidateUsername server")
+	}, "account /src/api")
 
 	return &ValidateUsernameRes{Success: success}, nil
 }
@@ -106,7 +106,7 @@ func (s *AccountServer) ValidateUsername(ctx context.Context, in *ValidateUserna
 func (s *AccountServer) ValidateEmail(ctx context.Context, in *ValidateEmailReq) (*ValidateEmailRes, error) {
 	fmt.Println("validating email")
 
-	ctx, span := trace.StartSpan(ctx, "account.grpc.ValidateEmail")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.api.ValidateEmail")
 	defer span.End()
 
 	success, err := s.db.ValidateEmail(ctx, in.Email)
@@ -117,7 +117,7 @@ func (s *AccountServer) ValidateEmail(ctx context.Context, in *ValidateEmailReq)
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("fetch", "ValidateEmail"),
-	}, "ValidateEmail server")
+	}, "account /src/api")
 
 	return &ValidateEmailRes{Success: success}, nil
 }
@@ -126,7 +126,7 @@ func (s *AccountServer) ValidateEmail(ctx context.Context, in *ValidateEmailReq)
 func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq) (*CreateAccountRes, error) {
 	log.Println("server: CreateAccount")
 
-	ctx, span := trace.StartSpan(ctx, "account.grpc.CreateAccount")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.api.CreateAccount")
 	defer span.End()
 
 	account, err := s.db.CreateAccount(ctx, in.Account)
@@ -137,7 +137,7 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("fetch", "CreateAccount"),
-	}, "CreateAccount server")
+	}, "account /src/api")
 
 	return &CreateAccountRes{Account: account}, nil
 }
@@ -146,7 +146,7 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 func (s *AccountServer) UpdateAccount(ctx context.Context, in *UpdateAccountReq) (*UpdateAccountRes, error) {
 	fmt.Println("updating profile")
 
-	ctx, span := trace.StartSpan(ctx, "account.grpc.UpdateAccount")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.account.UpdateAccount")
 	defer span.End()
 
 	account, err := s.db.UpdateAccount(ctx, in.Account)
@@ -157,7 +157,7 @@ func (s *AccountServer) UpdateAccount(ctx context.Context, in *UpdateAccountReq)
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("fetch", "UpdateAccount"),
-	}, "UpdateAccount server")
+	}, "account /src/api")
 
 	return &UpdateAccountRes{Success: true, Account: account}, nil
 }
@@ -166,12 +166,8 @@ func (s *AccountServer) UpdateAccount(ctx context.Context, in *UpdateAccountReq)
 func (s *AccountServer) ReadAccount(ctx context.Context, in *ReadAccountReq) (*ReadAccountRes, error) {
 	fmt.Println("reading single profile")
 
-	ctx, span := trace.StartSpan(ctx, "account.grpc.ReadAccount")
+	ctx, span := trace.StartSpan(ctx, "account.grpc.account.ReadAccount")
 	defer span.End()
-
-	span.Annotate([]trace.Attribute{
-		trace.StringAttribute("fetch", "ReadAccount"),
-	}, "fetch account from server")
 
 	account, err := s.db.ReadAccount(ctx, in.AccountId)
 	if err != nil {
@@ -184,7 +180,7 @@ func (s *AccountServer) ReadAccount(ctx context.Context, in *ReadAccountReq) (*R
 
 	span.Annotate([]trace.Attribute{
 		trace.StringAttribute("fetch", "ReadAccount"),
-	}, "ReadAccount server")
+	}, "account /src/api")
 
 	return &ReadAccountRes{Account: account}, nil
 }
