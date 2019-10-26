@@ -7,6 +7,8 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
 	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc/status"
+	"google.golang.org/grpc/codes"
 	"github.com/satori/go.uuid"
 
 	"github.com/nirajgeorgian/account/src/model"
@@ -29,7 +31,8 @@ func (db *Database) ValidateUsername(ctx context.Context, username string) (bool
 	var accountORM []*model.AccountORM
 	if err := db.First(&accountORM, "username = ?", username).Error; err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
-		return false, errors.New("error fetching account")
+		err := status.Error(codes.NotFound, "no account found")
+		return false, err
 	}
 
 	if len(accountORM) > 0 {
@@ -50,7 +53,8 @@ func (db *Database) ValidateEmail(ctx context.Context, email string) (bool, erro
 	var accountORM []*model.AccountORM
 	if err := db.First(&accountORM, "email = ?", email).Error; err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
-		return false, errors.New("error fetching account")
+		err := status.Error(codes.NotFound, "no account found")
+		return false, err
 	}
 
 	if len(accountORM) > 0 {
