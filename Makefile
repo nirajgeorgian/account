@@ -48,6 +48,7 @@ setup-go: ## install go dependency and setup go environment
 
 protos: ## generate the server and client proto defination files
 	@for service in account ; do \
+	protoc \
 		echo "generating $$service model" ; \
 		protoc \
 			-I src/proto \

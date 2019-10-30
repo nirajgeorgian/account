@@ -31,7 +31,6 @@ func (db *Database) ValidateUsername(ctx context.Context, username string) (bool
 	var accountORM []*model.AccountORM
 	if err := db.First(&accountORM, "username = ?", username).Error; err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
-		err := status.Error(codes.NotFound, "no account found")
 		return false, err
 	}
 
@@ -81,13 +80,15 @@ func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*mode
   }()
 	if err := tx.Error; err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+		err := status.Error(codes.Internal, "database query failed")
     return nil, err
   }
 
 	accountORM, err := in.ToORM(ctx)
 	if err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
-		return nil, errors.New("error converting input to ORM")
+		err := status.Error(codes.DataLoss, "error converting input to ORM")
+		return nil, err
 	}
 
 	u1 := uuid.NewV4()
@@ -97,26 +98,30 @@ func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*mode
 	hashedPass, err := HashPassword(accountORM.PasswordHash)
 	if err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
-		return nil, errors.New(fmt.Sprintf("error hashing password: %v", err))
+		err := status.Error(codes.DataLoss, fmt.Sprintf("error hashing password: %v", err))
+		return nil, err
 	}
 	accountORM.PasswordHash = hashedPass
 
 	if err = tx.Create(&accountORM).Error; err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
-		return nil, errors.New("error creating job")
+		err := status.Error(codes.DataLoss, "error converting input to ORM")
+		return nil, err
 	}
 
 	account, err := accountORM.ToPB(ctx)
 	if err != nil {
 		tx.Rollback()
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
-		return nil, errors.New("error converting back to PB")
+		err := status.Error(codes.DataLoss, "error converting input to PB")
+		return nil, err
 	}
 
 	if err = tx.Commit().Error; err != nil {
 		tx.Rollback()
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
-		return nil, errors.New("error commiting job create coommit")
+		err := status.Error(codes.Internal, "database insertion failed")
+		return nil, err
 	}
 
 	span.Annotate([]trace.Attribute{

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net"
 	"time"
+	"sync"
 
 	log "github.com/Sirupsen/logrus"
 
@@ -21,6 +22,8 @@ import (
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
+	"google.golang.org/grpc/codes"
 	"github.com/spf13/viper"
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -32,6 +35,7 @@ import (
 
 // AccountServer gives a base structure for account server.
 type AccountServer struct {
+	mu sync.Mutex
 	db *db.Database
 }
 
@@ -129,6 +133,22 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 	ctx, span := trace.StartSpan(ctx, "account.grpc.api.CreateAccount")
 	defer span.End()
 
+	accountPresent, err := s.db.ValidateUsername(ctx, in.Account.Username)
+	if err  != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+		return nil, err
+	}
+	if accountPresent {
+		err := status.Error(codes.NotFound, "account already exist")
+		return nil, err
+	}
+
+	_, err = s.db.ValidateEmail(ctx, in.Account.Email)
+	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+		return nil, err
+	}
+
 	account, err := s.db.CreateAccount(ctx, in.Account)
 	if err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
@@ -183,6 +203,27 @@ func (s *AccountServer) ReadAccount(ctx context.Context, in *ReadAccountReq) (*R
 	}, "account /src/api")
 
 	return &ReadAccountRes{Account: account}, nil
+}
+
+func (s *AccountServer) AccountCheck(ctx context.Context, in *AccountHealthCheckReq) (*AccountHealthCheckRes, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if in.Service == "" {
+		// check the server overall health status.
+		return &AccountHealthCheckRes{
+			Status: AccountHealthCheckRes_SERVING,
+		}, nil
+	}
+
+	statusMap := make(map[string]AccountHealthCheckRes_ServingStatus)
+	if status, ok := statusMap[in.Service]; ok {
+		return &AccountHealthCheckRes{
+			Status: status,
+		}, nil
+	}
+
+	return nil, status.Error(codes.NotFound, "unknown service")
 }
 
 // ListenGRPC serves the account API on GRPC server

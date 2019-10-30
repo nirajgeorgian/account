@@ -57,6 +57,20 @@ message ValidateEmailRes {
   bool success = 1;
 }
 
+// api status
+message AccountHealthCheckReq {
+  string service = 1;
+}
+
+message AccountHealthCheckRes {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  ServingStatus status = 1;
+}
+
 service AccountService {
   rpc CreateAccount (CreateAccountReq) returns (CreateAccountRes) {};
   rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
@@ -64,4 +78,5 @@ service AccountService {
   rpc Auth(AuthReq) returns (AuthRes) {};
   rpc ValidateUsername(ValidateUsernameReq) returns (ValidateUsernameRes) {};
   rpc ValidateEmail(ValidateEmailReq) returns (ValidateEmailRes) {};
+  rpc AccountCheck(AccountHealthCheckReq) returns (AccountHealthCheckRes) {};
 }
