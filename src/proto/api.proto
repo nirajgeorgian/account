@@ -15,6 +15,16 @@ message CreateAccountRes {
   Account account = 1;
 }
 
+// confirming an account
+message ConfirmAccountReq {
+  string Username = 1;
+  string Email = 2;
+  string Token = 3;
+}
+message ConfirmAccountRes {
+  bool Success = 1;
+}
+
 // read an account
 message ReadAccountReq {
   string account_id = 1;
@@ -73,6 +83,7 @@ message AccountHealthCheckRes {
 
 service AccountService {
   rpc CreateAccount (CreateAccountReq) returns (CreateAccountRes) {};
+  rpc ConfirmAccount (ConfirmAccountReq) returns (ConfirmAccountRes) {};
   rpc ReadAccount (ReadAccountReq) returns (ReadAccountRes) {};
   rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRes) {};
   rpc Auth(AuthReq) returns (AuthRes) {};
