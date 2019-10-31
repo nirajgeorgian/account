@@ -1,7 +1,9 @@
 package db
 
 import (
+	"io"
 	"fmt"
+	"crypto/rand"
 
 	"go.opencensus.io/trace"
 	"github.com/pkg/errors"
@@ -93,6 +95,7 @@ func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*mode
 
 	u1 := uuid.NewV4()
 	accountORM.AccountId = u1.String()
+	accountORM.VerificationCode = EncodeToString(6)
 
 	// hash password
 	hashedPass, err := HashPassword(accountORM.PasswordHash)
@@ -129,6 +132,50 @@ func (db *Database) CreateAccount(ctx context.Context, in *model.Account) (*mode
 	}, "account src/db")
 
 	return &account, nil
+}
+
+// confirm account token
+func (db *Database) ConfirmAccount(ctx context.Context, email string, token string) (bool, error) {
+	ctx, span := trace.StartSpan(ctx, "account.grpc.db.ConfirmAccount")
+	defer span.End()
+
+	var accountORM []*model.AccountORM
+	if err := db.First(&accountORM, "email = ?", email).Error; err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+		err := status.Error(codes.NotFound, "no account found")
+		return false, err
+	}
+
+	tx := db.Begin()
+	defer func() {
+    if r := recover(); r != nil {
+      tx.Rollback()
+    }
+  }()
+	if err := tx.Error; err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+    return false, err
+  }
+
+	if len(accountORM) > 0 {
+		if err := db.First(&accountORM, "email = ? AND verification_code = ?", email, token).Error; err != nil {
+			span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+			err := status.Error(codes.NotFound, "no account found")
+			return false, err
+		} else {
+			if err := tx.Model(&accountORM).Updates(model.Account{VerificationCode: "", Verified: true}).Error; err != nil {
+				span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+				return false, errors.New("error updating account")
+			}
+			return true, nil
+		}
+	}
+
+	span.Annotate([]trace.Attribute{
+		trace.StringAttribute("query", "ValidateEmail"),
+	}, "account src/db")
+
+	return false, nil
 }
 
 func (db *Database) Auth(ctx context.Context, in *model.Account) (*model.Account, error) {
@@ -266,4 +313,18 @@ func (db *Database) UpdateAccount(ctx context.Context, in *model.Account) (*mode
 	}, "account src/db")
 
 	return &account, nil
+}
+
+var table = [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+
+func EncodeToString(max int) string {
+    b := make([]byte, max)
+    n, err := io.ReadAtLeast(rand.Reader, b, max)
+    if n != max {
+        panic(err)
+    }
+    for i := 0; i < len(b); i++ {
+        b[i] = table[int(b[i])%len(table)]
+    }
+    return string(b)
 }

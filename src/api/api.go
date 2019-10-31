@@ -143,9 +143,13 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 		return nil, err
 	}
 
-	_, err = s.db.ValidateEmail(ctx, in.Account.Email)
+	accountPresent, err = s.db.ValidateEmail(ctx, in.Account.Email)
 	if err != nil {
 		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+		return nil, err
+	}
+	if accountPresent {
+		err := status.Error(codes.NotFound, "account already exist")
 		return nil, err
 	}
 
@@ -160,6 +164,44 @@ func (s *AccountServer) CreateAccount(ctx context.Context, in *CreateAccountReq)
 	}, "account /src/api")
 
 	return &CreateAccountRes{Account: account}, nil
+}
+
+func (s *AccountServer) ConfirmAccount(ctx context.Context, in *ConfirmAccountReq) (*ConfirmAccountRes, error) {
+	log.Println("server: ConfirmAccount")
+
+	ctx, span := trace.StartSpan(ctx, "account.grpc.api.CreateAccount")
+	defer span.End()
+
+	accountPresent, err := s.db.ValidateUsername(ctx, in.Username)
+	if err  != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+		return nil, err
+	}
+	if accountPresent {
+		err := status.Error(codes.NotFound, "account already exist")
+		return nil, err
+	}
+
+	_, err = s.db.ValidateEmail(ctx, in.Email)
+	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+		return nil, err
+	}
+
+	confirmed, err := s.db.ConfirmAccount(ctx, in.Email, in.Token)
+	if err != nil {
+		span.SetStatus(trace.Status{Code: trace.StatusCodeInternal, Message: err.Error()})
+		return nil, err
+	}
+
+	if confirmed {
+		return &ConfirmAccountRes{
+			Success: true,
+		}, nil
+	}
+	return &ConfirmAccountRes{
+		Success: false,
+	}, nil
 }
 
 // UpdateAccount creates a rpc network call to update an user profile
