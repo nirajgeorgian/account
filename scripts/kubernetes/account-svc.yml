@@ -1,0 +1,40 @@
+apiVersion: linkerd.io/v1alpha2
+kind: ServiceProfile
+metadata:
+  creationTimestamp: null
+  name: account-svc.default.svc.cluster.local
+  namespace: default
+spec:
+  routes:
+  - condition:
+      method: POST
+      pathRegex: /account\.AccountService/CreateAccount
+    name: CreateAccount
+  - condition:
+      method: POST
+      pathRegex: /account\.AccountService/ConfirmAccount
+    name: ConfirmAccount
+  - condition:
+      method: POST
+      pathRegex: /account\.AccountService/ReadAccount
+    name: ReadAccount
+  - condition:
+      method: POST
+      pathRegex: /account\.AccountService/UpdateAccount
+    name: UpdateAccount
+  - condition:
+      method: POST
+      pathRegex: /account\.AccountService/Auth
+    name: Auth
+  - condition:
+      method: POST
+      pathRegex: /account\.AccountService/ValidateUsername
+    name: ValidateUsername
+  - condition:
+      method: POST
+      pathRegex: /account\.AccountService/ValidateEmail
+    name: ValidateEmail
+  - condition:
+      method: POST
+      pathRegex: /account\.AccountService/AccountCheck
+    name: AccountCheck

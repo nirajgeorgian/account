@@ -7,7 +7,7 @@ metadata:
   name: account
   namespace: dododuck
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: account-svc
@@ -21,21 +21,22 @@ spec:
         app: account-svc
     spec:
       containers:
-      - env:
-        - name: DATABASEURI
-          value: host=salt.db.elephantsql.com user=pvhdolsp dbname=pvhdolsp password=WPSXt41F15pPgpTx-0V7CC6Ec5ALoyvL
-            sslmode=disable
-        - name: PORT
-          value: "3001"
-        image: nirajgeorgian/account:latest
-        imagePullPolicy: Always
-        name: account-svc
-        ports:
-        - containerPort: 3001
-          name: grpc
-        resources:
-          requests:
-            cpu: 100m
+        - env:
+            - name: DATABASEURI
+              value:
+                host=salt.db.elephantsql.com user=pvhdolsp dbname=pvhdolsp password=WPSXt41F15pPgpTx-0V7CC6Ec5ALoyvL
+                sslmode=disable
+            - name: PORT
+              value: "3001"
+          image: nirajgeorgian/account:latest
+          imagePullPolicy: Always
+          name: account-svc
+          ports:
+            - containerPort: 3001
+              name: grpc
+          resources:
+            requests:
+              cpu: 100m
       serviceAccountName: account
 status: {}
 ---
