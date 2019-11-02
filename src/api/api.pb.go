@@ -10,6 +10,8 @@ import (
 	proto "github.com/golang/protobuf/proto"
 	model "github.com/nirajgeorgian/account/src/model"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -893,6 +895,35 @@ type AccountServiceServer interface {
 	ValidateUsername(context.Context, *ValidateUsernameReq) (*ValidateUsernameRes, error)
 	ValidateEmail(context.Context, *ValidateEmailReq) (*ValidateEmailRes, error)
 	AccountCheck(context.Context, *AccountHealthCheckReq) (*AccountHealthCheckRes, error)
+}
+
+// UnimplementedAccountServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedAccountServiceServer struct {
+}
+
+func (*UnimplementedAccountServiceServer) CreateAccount(ctx context.Context, req *CreateAccountReq) (*CreateAccountRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
+}
+func (*UnimplementedAccountServiceServer) ConfirmAccount(ctx context.Context, req *ConfirmAccountReq) (*ConfirmAccountRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConfirmAccount not implemented")
+}
+func (*UnimplementedAccountServiceServer) ReadAccount(ctx context.Context, req *ReadAccountReq) (*ReadAccountRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReadAccount not implemented")
+}
+func (*UnimplementedAccountServiceServer) UpdateAccount(ctx context.Context, req *UpdateAccountReq) (*UpdateAccountRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAccount not implemented")
+}
+func (*UnimplementedAccountServiceServer) Auth(ctx context.Context, req *AuthReq) (*AuthRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
+}
+func (*UnimplementedAccountServiceServer) ValidateUsername(ctx context.Context, req *ValidateUsernameReq) (*ValidateUsernameRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateUsername not implemented")
+}
+func (*UnimplementedAccountServiceServer) ValidateEmail(ctx context.Context, req *ValidateEmailReq) (*ValidateEmailRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateEmail not implemented")
+}
+func (*UnimplementedAccountServiceServer) AccountCheck(ctx context.Context, req *AccountHealthCheckReq) (*AccountHealthCheckRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AccountCheck not implemented")
 }
 
 func RegisterAccountServiceServer(s *grpc.Server, srv AccountServiceServer) {
